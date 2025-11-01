@@ -20,6 +20,7 @@ const Header = () => {
   const { user } = useAuth();
   const { totalItems } = useCart();
   const [categories, setCategories] = useState<string[]>([]);
+  const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
   
   const activeLinkStyle = {
     color: '#2563eb',
@@ -42,6 +43,26 @@ const Header = () => {
     };
     fetchCategories();
   }, []);
+
+  const categoryLinks = (isMobile = false) => {
+    const baseClass = isMobile
+      ? "block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-100"
+      : "text-gray-600 hover:text-primary-600 font-medium px-3 py-2 rounded-md text-sm transition";
+
+    return (
+        <>
+            <NavLink to="/" end className={baseClass} style={({ isActive }) => isActive ? activeCategoryStyle : undefined} onClick={() => isMobile && setIsCategoryMenuOpen(false)}>
+                All
+            </NavLink>
+            {categories.map(category => (
+                <NavLink key={category} to={`/?category=${category}`} className={baseClass} style={({ isActive }) => isActive ? activeCategoryStyle : undefined} onClick={() => isMobile && setIsCategoryMenuOpen(false)}>
+                    {category}
+                </NavLink>
+            ))}
+        </>
+    );
+  };
+
 
   return (
     <header className="bg-white shadow-md sticky top-0 z-50">
@@ -77,6 +98,9 @@ const Header = () => {
                         {user.role === 'admin' && (
                             <Link to="/admin" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 border-t">Admin Panel</Link>
                         )}
+                         {user.role === 'sub-admin' && (
+                            <Link to="/sub-admin" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 border-t">Vendor Panel</Link>
+                        )}
                     </div>
                 </div>
             ) : (
@@ -95,15 +119,26 @@ const Header = () => {
        {categories.length > 0 && (
         <nav className="bg-gray-100 border-t border-b border-gray-200">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-center h-12 space-x-6">
-                     <NavLink to="/" end className="text-gray-600 hover:text-primary-600 font-medium px-3 py-2 rounded-md text-sm transition" style={({ isActive }) => isActive ? activeCategoryStyle : undefined}>
-                        All
-                    </NavLink>
-                    {categories.map(category => (
-                        <NavLink key={category} to={`/?category=${category}`} className="text-gray-600 hover:text-primary-600 font-medium px-3 py-2 rounded-md text-sm transition" style={({ isActive }) => isActive ? activeCategoryStyle : undefined}>
-                            {category}
-                        </NavLink>
-                    ))}
+                {/* Desktop Menu */}
+                <div className="hidden md:flex items-center justify-center h-12 space-x-6">
+                    {categoryLinks(false)}
+                </div>
+
+                {/* Mobile Menu */}
+                <div className="md:hidden">
+                    <button
+                        onClick={() => setIsCategoryMenuOpen(!isCategoryMenuOpen)}
+                        className="w-full text-left py-3 font-medium text-gray-700 flex justify-between items-center"
+                        aria-expanded={isCategoryMenuOpen}
+                    >
+                        <span>Browse Categories</span>
+                        <svg className={`w-5 h-5 transition-transform transform ${isCategoryMenuOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    {isCategoryMenuOpen && (
+                        <div className="py-2 space-y-1">
+                            {categoryLinks(true)}
+                        </div>
+                    )}
                 </div>
             </div>
         </nav>
