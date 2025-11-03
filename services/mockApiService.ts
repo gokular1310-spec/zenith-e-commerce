@@ -1,4 +1,4 @@
-import { Product, User, Order, OrderStatus, NewProduct, CartItem, ShippingAddress, Conversation, Message, Review, NewReview, AITopic, Page, NewPage } from '../types';
+import { Product, User, Order, OrderStatus, NewProduct, CartItem, ShippingAddress, Conversation, Message, Review, NewReview, AITopic, Page, NewPage, SavedTheme, ThemeSettings } from '../types';
 
 const mockProducts: Product[] = [
   // Electronics
@@ -236,6 +236,36 @@ let mockPages: Page[] = [
         updatedAt: new Date().toISOString(),
     },
 ];
+
+let mockSavedThemes: SavedTheme[] = [
+    {
+        id: 'theme-default',
+        name: 'Default',
+        isActive: true,
+        header: {
+            background: { type: 'solid', color1: '#FFFFFF' },
+            textColor: '#374151'
+        },
+        footer: {
+            background: { type: 'solid', color1: '#FFFFFF' },
+            textColor: '#6B7280'
+        }
+    },
+    {
+        id: 'theme-dark',
+        name: 'Zenith Dark',
+        isActive: false,
+        header: {
+            background: { type: 'solid', color1: '#1F2937' },
+            textColor: '#F9FAFB'
+        },
+        footer: {
+            background: { type: 'solid', color1: '#1F2937' },
+            textColor: '#D1D5DB'
+        }
+    },
+];
+
 
 const simulateDelay = <T,>(data: T): Promise<T> =>
   new Promise(resolve => setTimeout(() => resolve(data), 500));
@@ -547,5 +577,42 @@ export const api = {
           return simulateDelay(true);
       }
       return simulateDelay(false);
+  },
+
+  // Theme Customization API
+  getSavedThemes: () => simulateDelay([...mockSavedThemes]),
+  getActiveThemeSettings: () => {
+    const activeTheme = mockSavedThemes.find(t => t.isActive);
+    return simulateDelay(activeTheme ? { header: activeTheme.header, footer: activeTheme.footer } : null);
+  },
+  saveTheme: (name: string, settings: ThemeSettings) => {
+    const newTheme: SavedTheme = {
+        id: `theme-${Date.now()}`,
+        name,
+        isActive: false,
+        ...settings
+    };
+    mockSavedThemes.push(newTheme);
+    return simulateDelay(newTheme);
+  },
+  deleteTheme: (themeId: string) => {
+    const themeIndex = mockSavedThemes.findIndex(t => t.id === themeId);
+    if (themeIndex > -1 && !mockSavedThemes[themeIndex].isActive) { // Don't delete active theme
+        mockSavedThemes.splice(themeIndex, 1);
+        return simulateDelay(true);
+    }
+    return simulateDelay(false);
+  },
+  setActiveTheme: (themeId: string) => {
+    let activatedTheme: SavedTheme | null = null;
+    mockSavedThemes.forEach(theme => {
+        if (theme.id === themeId) {
+            theme.isActive = true;
+            activatedTheme = theme;
+        } else {
+            theme.isActive = false;
+        }
+    });
+    return simulateDelay(activatedTheme);
   },
 };

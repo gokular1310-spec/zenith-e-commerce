@@ -121,3 +121,29 @@ export interface Page {
 }
 
 export type NewPage = Omit<Page, 'id' | 'createdAt' | 'updatedAt'>;
+
+
+// Types for Theme Customization
+export interface BackgroundSetting {
+  type: 'solid' | 'gradient';
+  color1: string; // Used for solid color or first gradient color
+  color2?: string; // Second gradient color
+  direction?: string; // e.g., 'to bottom right'
+}
+
+export interface ThemeSettings {
+  header: {
+    background: BackgroundSetting;
+    textColor: string;
+  };
+  footer: {
+    background: BackgroundSetting;
+    textColor: string;
+  };
+}
+
+export interface SavedTheme extends ThemeSettings {
+  id: string;
+  name: string;
+  isActive: boolean;
+}

@@ -3,6 +3,7 @@ import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { SiteAppearanceProvider } from './context/SiteAppearanceContext';
 
 import PublicLayout from './layouts/PublicLayout';
 import HomePage from './pages/public/HomePage';
@@ -47,6 +48,7 @@ import AdminEditProductPage from './pages/admin/AdminEditProductPage';
 import AdminPagesListPage from './pages/admin/AdminPagesListPage';
 import AdminAddPage from './pages/admin/AdminAddPage';
 import AdminEditPage from './pages/admin/AdminEditPage';
+import AdminThemeSettingsPage from './pages/admin/AdminThemeSettingsPage';
 
 
 import SubAdminProtectedRoute from './layouts/SubAdminProtectedRoute';
@@ -69,82 +71,85 @@ const AppRoutes = () => {
   return (
     <AuthProvider>
       <CartProvider>
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<PublicLayout />}>
-            <Route index element={<HomePage />} />
-            <Route path="products/:productId" element={<ProductDetailPage />} />
-            <Route path="cart" element={<CartPage />} />
-            <Route path="login" element={<LoginPage />} />
-            <Route path="register" element={<RegisterPage />} />
-            <Route path="forgot-password" element={<ForgotPasswordPage />} />
-            <Route path="reset-password/:token" element={<ResetPasswordPage />} />
+        <SiteAppearanceProvider>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<PublicLayout />}>
+              <Route index element={<HomePage />} />
+              <Route path="products/:productId" element={<ProductDetailPage />} />
+              <Route path="cart" element={<CartPage />} />
+              <Route path="login" element={<LoginPage />} />
+              <Route path="register" element={<RegisterPage />} />
+              <Route path="forgot-password" element={<ForgotPasswordPage />} />
+              <Route path="reset-password/:token" element={<ResetPasswordPage />} />
+              
+              {/* CMS-driven pages */}
+              <Route path="pages/:slug" element={<DynamicPage />} />
+
+              {/* Static Pages */}
+              <Route path="about" element={<AboutPage />} />
+              <Route path="team" element={<TeamPage />} />
+              <Route path="contact" element={<ContactPage />} />
+              <Route path="return-policy" element={<ReturnPolicyPage />} />
+              <Route path="privacy-policy" element={<PrivacyPolicyPage />} />
+              <Route path="terms-of-service" element={<TermsOfServicePage />} />
+
+
+              {/* Customer Protected Routes */}
+              <Route element={<CustomerProtectedRoute />}>
+                <Route path="checkout" element={<CheckoutPage />} />
+                <Route path="payment" element={<PaymentPage />} />
+                <Route path="order-confirmation" element={<OrderConfirmationPage />} />
+                <Route path="my-orders" element={<MyOrdersPage />} />
+                <Route path="my-orders/:orderId" element={<TrackOrderPage />} />
+                <Route path="my-messages" element={<MyMessagesPage />} />
+                <Route path="my-messages/:conversationId" element={<ConversationDetailPage />} />
+                <Route path="my-profile" element={<MyProfilePage />} />
+              </Route>
+            </Route>
+
+            {/* Admin Routes */}
+            {/* FIX: Refactored to use layout route pattern to resolve 'missing children' errors. */}
+            <Route element={<ProtectedRoute />}>
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route index element={<Navigate to="dashboard" replace />} />
+                <Route path="dashboard" element={<AdminDashboardPage />} />
+                <Route path="orders" element={<AdminOrdersPage />} />
+                <Route path="orders/:orderId" element={<AdminOrderDetailPage />} />
+                <Route path="products" element={<AdminProductsPage />} />
+                <Route path="products/new" element={<AdminAddProductPage />} />
+                <Route path="products/edit/:productId" element={<AdminEditProductPage />} />
+                <Route path="messages" element={<AdminMessagesPage />} />
+                <Route path="messages/:conversationId" element={<AdminConversationDetailPage />} />
+                <Route path="users" element={<AdminUsersPage />} />
+                <Route path="users/new" element={<AdminAddUserPage />} />
+                <Route path="ai-settings" element={<AdminAISettingsPage />} />
+                <Route path="pages" element={<AdminPagesListPage />} />
+                <Route path="pages/new" element={<AdminAddPage />} />
+                <Route path="pages/edit/:pageId" element={<AdminEditPage />} />
+                <Route path="pages/themes" element={<AdminThemeSettingsPage />} />
+              </Route>
+            </Route>
             
-            {/* CMS-driven pages */}
-            <Route path="pages/:slug" element={<DynamicPage />} />
-
-            {/* Static Pages */}
-            <Route path="about" element={<AboutPage />} />
-            <Route path="team" element={<TeamPage />} />
-            <Route path="contact" element={<ContactPage />} />
-            <Route path="return-policy" element={<ReturnPolicyPage />} />
-            <Route path="privacy-policy" element={<PrivacyPolicyPage />} />
-            <Route path="terms-of-service" element={<TermsOfServicePage />} />
-
-
-            {/* Customer Protected Routes */}
-            <Route element={<CustomerProtectedRoute />}>
-              <Route path="checkout" element={<CheckoutPage />} />
-              <Route path="payment" element={<PaymentPage />} />
-              <Route path="order-confirmation" element={<OrderConfirmationPage />} />
-              <Route path="my-orders" element={<MyOrdersPage />} />
-              <Route path="my-orders/:orderId" element={<TrackOrderPage />} />
-              <Route path="my-messages" element={<MyMessagesPage />} />
-              <Route path="my-messages/:conversationId" element={<ConversationDetailPage />} />
-              <Route path="my-profile" element={<MyProfilePage />} />
+            {/* Sub-Admin Routes */}
+            {/* FIX: Refactored to use layout route pattern to resolve 'missing children' errors. */}
+            <Route element={<SubAdminProtectedRoute />}>
+              <Route path="/sub-admin" element={<SubAdminLayout />}>
+                <Route index element={<Navigate to="dashboard" replace />} />
+                <Route path="dashboard" element={<SubAdminDashboardPage />} />
+                <Route path="orders" element={<SubAdminOrdersPage />} />
+                <Route path="orders/:orderId" element={<SubAdminOrderDetailPage />} />
+                <Route path="products" element={<SubAdminProductsPage />} />
+                <Route path="products/new" element={<SubAdminAddProductPage />} />
+                <Route path="products/edit/:productId" element={<SubAdminEditProductPage />} />
+                <Route path="messages" element={<SubAdminMessagesPage />} />
+                <Route path="messages/:conversationId" element={<SubAdminConversationDetailPage />} />
+              </Route>
             </Route>
-          </Route>
 
-          {/* Admin Routes */}
-          {/* FIX: Refactored to use layout route pattern to resolve 'missing children' errors. */}
-          <Route element={<ProtectedRoute />}>
-            <Route path="/admin" element={<AdminLayout />}>
-              <Route index element={<Navigate to="dashboard" replace />} />
-              <Route path="dashboard" element={<AdminDashboardPage />} />
-              <Route path="orders" element={<AdminOrdersPage />} />
-              <Route path="orders/:orderId" element={<AdminOrderDetailPage />} />
-              <Route path="products" element={<AdminProductsPage />} />
-              <Route path="products/new" element={<AdminAddProductPage />} />
-              <Route path="products/edit/:productId" element={<AdminEditProductPage />} />
-              <Route path="messages" element={<AdminMessagesPage />} />
-              <Route path="messages/:conversationId" element={<AdminConversationDetailPage />} />
-              <Route path="users" element={<AdminUsersPage />} />
-              <Route path="users/new" element={<AdminAddUserPage />} />
-              <Route path="ai-settings" element={<AdminAISettingsPage />} />
-              <Route path="pages" element={<AdminPagesListPage />} />
-              <Route path="pages/new" element={<AdminAddPage />} />
-              <Route path="pages/edit/:pageId" element={<AdminEditPage />} />
-            </Route>
-          </Route>
-          
-          {/* Sub-Admin Routes */}
-          {/* FIX: Refactored to use layout route pattern to resolve 'missing children' errors. */}
-          <Route element={<SubAdminProtectedRoute />}>
-            <Route path="/sub-admin" element={<SubAdminLayout />}>
-              <Route index element={<Navigate to="dashboard" replace />} />
-              <Route path="dashboard" element={<SubAdminDashboardPage />} />
-              <Route path="orders" element={<SubAdminOrdersPage />} />
-              <Route path="orders/:orderId" element={<SubAdminOrderDetailPage />} />
-              <Route path="products" element={<SubAdminProductsPage />} />
-              <Route path="products/new" element={<SubAdminAddProductPage />} />
-              <Route path="products/edit/:productId" element={<SubAdminEditProductPage />} />
-              <Route path="messages" element={<SubAdminMessagesPage />} />
-              <Route path="messages/:conversationId" element={<SubAdminConversationDetailPage />} />
-            </Route>
-          </Route>
-
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </SiteAppearanceProvider>
       </CartProvider>
     </AuthProvider>
   );

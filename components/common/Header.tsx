@@ -4,6 +4,8 @@ import { useAuth } from '../../hooks/useAuth';
 import { useCart } from '../../hooks/useCart';
 import { api } from '../../services/mockApiService';
 import ThemeSwitcher from './ThemeSwitcher';
+import { useSiteAppearance } from '../../hooks/useSiteAppearance';
+import { BackgroundSetting } from '../../types';
 
 const ShoppingCartIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -20,6 +22,7 @@ const UserIcon = () => (
 const Header = () => {
   const { user } = useAuth();
   const { totalItems } = useCart();
+  const { activeThemeSettings } = useSiteAppearance();
   const [categories, setCategories] = useState<string[]>([]);
   const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
   
@@ -44,6 +47,29 @@ const Header = () => {
     };
     fetchCategories();
   }, []);
+  
+  const generateBackgroundStyle = (bg: BackgroundSetting | undefined) => {
+    if (!bg) return {};
+    if (bg.type === 'gradient' && bg.color2) {
+        return { background: `linear-gradient(${bg.direction || 'to right'}, ${bg.color1}, ${bg.color2})` };
+    }
+    return { backgroundColor: bg.color1 };
+  };
+
+  const headerStyle = {
+    ...generateBackgroundStyle(activeThemeSettings?.header.background),
+    color: activeThemeSettings?.header.textColor,
+  };
+  
+  const getLinkStyle = ({ isActive }: { isActive: boolean }) => {
+    const baseStyle = { color: activeThemeSettings?.header.textColor };
+    if (isActive) {
+      return { ...activeLinkStyle }; // Active style takes precedence
+    }
+    return baseStyle;
+  };
+  
+  const iconColorStyle = { color: activeThemeSettings?.header.textColor };
 
   const categoryLinks = (isMobile = false) => {
     const baseClass = isMobile
@@ -66,26 +92,26 @@ const Header = () => {
 
 
   return (
-    <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50">
+    <header className="shadow-md sticky top-0 z-50" style={headerStyle}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
-            <Link to="/" className="flex items-center space-x-2 text-primary-600 hover:text-primary-700 transition-colors">
-                <svg className="h-8 w-auto" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <Link to="/" className="flex items-center space-x-2 transition-colors">
+                <svg className="h-8 w-auto text-primary-600" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5-10-5-10 5z"/>
                 </svg>
-                <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">Zenith</span>
+                <span className="text-2xl font-bold" style={{ color: activeThemeSettings?.header.textColor }}>Zenith</span>
             </Link>
           </div>
           <nav className="hidden md:flex md:space-x-8">
-             <NavLink to="/" className="text-gray-500 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white" style={({ isActive }) => isActive ? activeLinkStyle : undefined}>Home</NavLink>
-             <NavLink to="/about" className="text-gray-500 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white" style={({ isActive }) => isActive ? activeLinkStyle : undefined}>About</NavLink>
-             <NavLink to="/team" className="text-gray-500 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white" style={({ isActive }) => isActive ? activeLinkStyle : undefined}>Team</NavLink>
-             <NavLink to="/contact" className="text-gray-500 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white" style={({ isActive }) => isActive ? activeLinkStyle : undefined}>Contact</NavLink>
+             <NavLink to="/" style={getLinkStyle}>Home</NavLink>
+             <NavLink to="/about" style={getLinkStyle}>About</NavLink>
+             <NavLink to="/team" style={getLinkStyle}>Team</NavLink>
+             <NavLink to="/contact" style={getLinkStyle}>Contact</NavLink>
           </nav>
           <div className="flex items-center space-x-4">
             <ThemeSwitcher />
-            <Link to="/cart" className="relative text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
+            <Link to="/cart" className="relative" style={iconColorStyle}>
               <ShoppingCartIcon />
               {totalItems > 0 && (
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">{totalItems}</span>
@@ -93,7 +119,7 @@ const Header = () => {
             </Link>
             {user ? (
                 <div className="relative group">
-                    <button className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"><UserIcon /></button>
+                    <button style={iconColorStyle}><UserIcon /></button>
                     <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg py-1 z-20 hidden group-hover:block">
                         <div className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200 border-b border-gray-200 dark:border-gray-600">{user.email}</div>
                         <Link to="/my-profile" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600">My Profile</Link>
@@ -107,7 +133,7 @@ const Header = () => {
                 </div>
             ) : (
                 <div className="flex items-center space-x-2">
-                    <Link to="/login" className="text-sm font-medium text-gray-500 dark:text-gray-300 hover:text-primary-600 px-3 py-2 rounded-md">
+                    <Link to="/login" className="text-sm font-medium px-3 py-2 rounded-md" style={{ color: activeThemeSettings?.header.textColor }}>
                         Sign in
                     </Link>
                     <Link to="/register" className="text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 px-3 py-2 rounded-md">

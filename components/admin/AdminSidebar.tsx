@@ -84,6 +84,9 @@ const AdminSidebar = () => {
                                 <NavLink to="/admin/pages/new" className={({isActive}) => `${subMenuBaseClassName} ${isActive ? activeClassName : inactiveClassName}`}>
                                     Add New
                                 </NavLink>
+                                <NavLink to="/admin/pages/themes" className={({isActive}) => `${subMenuBaseClassName} ${isActive ? activeClassName : inactiveClassName}`}>
+                                    Themes
+                                </NavLink>
                             </div>
                         )}
                     </div>
