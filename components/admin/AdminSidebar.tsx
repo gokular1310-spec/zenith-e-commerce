@@ -5,7 +5,7 @@ import { useAuth } from '../../hooks/useAuth';
 const DashboardIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>;
 const OrdersIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>;
 const ProductsIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>;
-const AddProductIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
+const PagesIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>;
 const MessagesIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>;
 const UsersIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M15 21a6 6 0 00-9-5.197M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>;
 const LogoutIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>;
@@ -15,11 +15,13 @@ const AdminSidebar = () => {
     const { logout } = useAuth();
     const location = useLocation();
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+    const [isPagesMenuOpen, setIsPagesMenuOpen] = useState(false);
+    const [isProductsMenuOpen, setIsProductsMenuOpen] = useState(false);
 
     useEffect(() => {
-        if (location.pathname.startsWith('/admin/users')) {
-            setIsUserMenuOpen(true);
-        }
+        setIsUserMenuOpen(location.pathname.startsWith('/admin/users'));
+        setIsPagesMenuOpen(location.pathname.startsWith('/admin/pages'));
+        setIsProductsMenuOpen(location.pathname.startsWith('/admin/products'));
     }, [location.pathname]);
 
     const activeClassName = "bg-gray-700 text-white";
@@ -43,14 +45,49 @@ const AdminSidebar = () => {
                         <OrdersIcon />
                         <span className="ml-3">Orders</span>
                     </NavLink>
-                    <NavLink to="/admin/products" end className={({isActive}) => `${baseClassName} ${isActive ? activeClassName : inactiveClassName}`}>
-                        <ProductsIcon />
-                        <span className="ml-3">Products</span>
-                    </NavLink>
-                    <NavLink to="/admin/products/new" className={({isActive}) => `${baseClassName} ${isActive ? activeClassName : inactiveClassName}`}>
-                        <AddProductIcon />
-                        <span className="ml-3">Add Product</span>
-                    </NavLink>
+
+                    {/* Products Dropdown Menu */}
+                    <div>
+                        <button onClick={() => setIsProductsMenuOpen(!isProductsMenuOpen)} className={`${baseClassName} w-full justify-between ${inactiveClassName}`}>
+                            <div className="flex items-center">
+                                <ProductsIcon />
+                                <span className="ml-3">Products</span>
+                            </div>
+                            <svg className={`w-5 h-5 transition-transform ${isProductsMenuOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        {isProductsMenuOpen && (
+                            <div className="mt-1 space-y-1">
+                                <NavLink to="/admin/products" end className={({isActive}) => `${subMenuBaseClassName} ${isActive ? activeClassName : inactiveClassName}`}>
+                                    All Products
+                                </NavLink>
+                                <NavLink to="/admin/products/new" className={({isActive}) => `${subMenuBaseClassName} ${isActive ? activeClassName : inactiveClassName}`}>
+                                    Add New
+                                </NavLink>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Pages Dropdown Menu */}
+                    <div>
+                        <button onClick={() => setIsPagesMenuOpen(!isPagesMenuOpen)} className={`${baseClassName} w-full justify-between ${inactiveClassName}`}>
+                            <div className="flex items-center">
+                                <PagesIcon />
+                                <span className="ml-3">Pages</span>
+                            </div>
+                            <svg className={`w-5 h-5 transition-transform ${isPagesMenuOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        {isPagesMenuOpen && (
+                            <div className="mt-1 space-y-1">
+                                <NavLink to="/admin/pages" end className={({isActive}) => `${subMenuBaseClassName} ${isActive ? activeClassName : inactiveClassName}`}>
+                                    All Pages
+                                </NavLink>
+                                <NavLink to="/admin/pages/new" className={({isActive}) => `${subMenuBaseClassName} ${isActive ? activeClassName : inactiveClassName}`}>
+                                    Add New
+                                </NavLink>
+                            </div>
+                        )}
+                    </div>
+
                     <NavLink to="/admin/messages" className={({isActive}) => `${baseClassName} ${isActive ? activeClassName : inactiveClassName}`}>
                         <MessagesIcon />
                         <span className="ml-3">Messages</span>

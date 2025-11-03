@@ -2,14 +2,13 @@ import React from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
+import { ThemeProvider } from './context/ThemeContext';
 
 import PublicLayout from './layouts/PublicLayout';
 import HomePage from './pages/public/HomePage';
 import ProductDetailPage from './pages/public/ProductDetailPage';
 import CartPage from './pages/public/CartPage';
 import LoginPage from './pages/LoginPage';
-import AboutPage from './pages/public/AboutPage';
-import ContactPage from './pages/public/ContactPage';
 import RegisterPage from './pages/public/RegisterPage';
 import CheckoutPage from './pages/public/CheckoutPage';
 import PaymentPage from './pages/public/PaymentPage';
@@ -19,10 +18,16 @@ import TrackOrderPage from './pages/public/TrackOrderPage';
 import MyMessagesPage from './pages/public/MyMessagesPage';
 import ConversationDetailPage from './pages/public/ConversationDetailPage';
 import MyProfilePage from './pages/public/MyProfilePage';
+import ForgotPasswordPage from './pages/public/ForgotPasswordPage';
+import ResetPasswordPage from './pages/public/ResetPasswordPage';
+import DynamicPage from './pages/public/DynamicPage';
+// Add static page imports
+import AboutPage from './pages/public/AboutPage';
 import TeamPage from './pages/public/TeamPage';
+import ContactPage from './pages/public/ContactPage';
+import ReturnPolicyPage from './pages/public/ReturnPolicyPage';
 import PrivacyPolicyPage from './pages/public/PrivacyPolicyPage';
 import TermsOfServicePage from './pages/public/TermsOfServicePage';
-import ReturnPolicyPage from './pages/public/ReturnPolicyPage';
 
 
 import ProtectedRoute from './layouts/ProtectedRoute';
@@ -39,6 +44,10 @@ import AdminConversationDetailPage from './pages/admin/AdminConversationDetailPa
 import AdminOrderDetailPage from './pages/admin/AdminOrderDetailPage';
 import AdminAISettingsPage from './pages/admin/AdminAISettingsPage';
 import AdminEditProductPage from './pages/admin/AdminEditProductPage';
+import AdminPagesListPage from './pages/admin/AdminPagesListPage';
+import AdminAddPage from './pages/admin/AdminAddPage';
+import AdminEditPage from './pages/admin/AdminEditPage';
+
 
 import SubAdminProtectedRoute from './layouts/SubAdminProtectedRoute';
 import SubAdminLayout from './layouts/SubAdminLayout';
@@ -68,12 +77,20 @@ const AppRoutes = () => {
             <Route path="cart" element={<CartPage />} />
             <Route path="login" element={<LoginPage />} />
             <Route path="register" element={<RegisterPage />} />
+            <Route path="forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="reset-password/:token" element={<ResetPasswordPage />} />
+            
+            {/* CMS-driven pages */}
+            <Route path="pages/:slug" element={<DynamicPage />} />
+
+            {/* Static Pages */}
             <Route path="about" element={<AboutPage />} />
-            <Route path="contact" element={<ContactPage />} />
             <Route path="team" element={<TeamPage />} />
+            <Route path="contact" element={<ContactPage />} />
+            <Route path="return-policy" element={<ReturnPolicyPage />} />
             <Route path="privacy-policy" element={<PrivacyPolicyPage />} />
             <Route path="terms-of-service" element={<TermsOfServicePage />} />
-            <Route path="return-policy" element={<ReturnPolicyPage />} />
+
 
             {/* Customer Protected Routes */}
             <Route element={<CustomerProtectedRoute />}>
@@ -89,46 +106,41 @@ const AppRoutes = () => {
           </Route>
 
           {/* Admin Routes */}
-          <Route 
-            path="/admin" 
-            element={
-              <ProtectedRoute>
-                <AdminLayout />
-              </ProtectedRoute>
-            }
-          >
-            <Route index element={<Navigate to="dashboard" replace />} />
-            <Route path="dashboard" element={<AdminDashboardPage />} />
-            <Route path="orders" element={<AdminOrdersPage />} />
-            <Route path="orders/:orderId" element={<AdminOrderDetailPage />} />
-            <Route path="products" element={<AdminProductsPage />} />
-            <Route path="products/new" element={<AdminAddProductPage />} />
-            <Route path="products/edit/:productId" element={<AdminEditProductPage />} />
-            <Route path="messages" element={<AdminMessagesPage />} />
-            <Route path="messages/:conversationId" element={<AdminConversationDetailPage />} />
-            <Route path="users" element={<AdminUsersPage />} />
-            <Route path="users/new" element={<AdminAddUserPage />} />
-            <Route path="ai-settings" element={<AdminAISettingsPage />} />
+          {/* FIX: Refactored to use layout route pattern to resolve 'missing children' errors. */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<Navigate to="dashboard" replace />} />
+              <Route path="dashboard" element={<AdminDashboardPage />} />
+              <Route path="orders" element={<AdminOrdersPage />} />
+              <Route path="orders/:orderId" element={<AdminOrderDetailPage />} />
+              <Route path="products" element={<AdminProductsPage />} />
+              <Route path="products/new" element={<AdminAddProductPage />} />
+              <Route path="products/edit/:productId" element={<AdminEditProductPage />} />
+              <Route path="messages" element={<AdminMessagesPage />} />
+              <Route path="messages/:conversationId" element={<AdminConversationDetailPage />} />
+              <Route path="users" element={<AdminUsersPage />} />
+              <Route path="users/new" element={<AdminAddUserPage />} />
+              <Route path="ai-settings" element={<AdminAISettingsPage />} />
+              <Route path="pages" element={<AdminPagesListPage />} />
+              <Route path="pages/new" element={<AdminAddPage />} />
+              <Route path="pages/edit/:pageId" element={<AdminEditPage />} />
+            </Route>
           </Route>
           
           {/* Sub-Admin Routes */}
-          <Route 
-            path="/sub-admin" 
-            element={
-              <SubAdminProtectedRoute>
-                <SubAdminLayout />
-              </SubAdminProtectedRoute>
-            }
-          >
-            <Route index element={<Navigate to="dashboard" replace />} />
-            <Route path="dashboard" element={<SubAdminDashboardPage />} />
-            <Route path="orders" element={<SubAdminOrdersPage />} />
-            <Route path="orders/:orderId" element={<SubAdminOrderDetailPage />} />
-            <Route path="products" element={<SubAdminProductsPage />} />
-            <Route path="products/new" element={<SubAdminAddProductPage />} />
-            <Route path="products/edit/:productId" element={<SubAdminEditProductPage />} />
-            <Route path="messages" element={<SubAdminMessagesPage />} />
-            <Route path="messages/:conversationId" element={<SubAdminConversationDetailPage />} />
+          {/* FIX: Refactored to use layout route pattern to resolve 'missing children' errors. */}
+          <Route element={<SubAdminProtectedRoute />}>
+            <Route path="/sub-admin" element={<SubAdminLayout />}>
+              <Route index element={<Navigate to="dashboard" replace />} />
+              <Route path="dashboard" element={<SubAdminDashboardPage />} />
+              <Route path="orders" element={<SubAdminOrdersPage />} />
+              <Route path="orders/:orderId" element={<SubAdminOrderDetailPage />} />
+              <Route path="products" element={<SubAdminProductsPage />} />
+              <Route path="products/new" element={<SubAdminAddProductPage />} />
+              <Route path="products/edit/:productId" element={<SubAdminEditProductPage />} />
+              <Route path="messages" element={<SubAdminMessagesPage />} />
+              <Route path="messages/:conversationId" element={<SubAdminConversationDetailPage />} />
+            </Route>
           </Route>
 
           <Route path="*" element={<Navigate to="/" />} />
@@ -142,7 +154,9 @@ const AppRoutes = () => {
 function App() {
   return (
     <HashRouter>
-      <AppRoutes />
+      <ThemeProvider>
+        <AppRoutes />
+      </ThemeProvider>
     </HashRouter>
   );
 }

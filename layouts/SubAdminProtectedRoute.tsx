@@ -1,13 +1,9 @@
-import React, { ReactNode } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import React from 'react';
+import { Navigate, useLocation, Outlet } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import Spinner from '../components/common/Spinner';
 
-interface ProtectedRouteProps {
-  children: ReactNode;
-}
-
-const SubAdminProtectedRoute = ({ children }: ProtectedRouteProps) => {
+const SubAdminProtectedRoute = () => {
   const { user, loading } = useAuth();
   const location = useLocation();
 
@@ -23,7 +19,7 @@ const SubAdminProtectedRoute = ({ children }: ProtectedRouteProps) => {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  return <>{children}</>;
+  return <Outlet />;
 };
 
 export default SubAdminProtectedRoute;

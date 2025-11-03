@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useState, useEffect, PropsWithChildren } from 'react';
 import { User } from '../types';
 import { api } from '../services/mockApiService';
 import { useNavigate } from 'react-router-dom';
@@ -13,7 +13,8 @@ interface AuthContextType {
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
+// FIX: Switched to PropsWithChildren to resolve type inference issues with the 'children' prop.
+export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();

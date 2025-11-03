@@ -1,6 +1,15 @@
 import React from 'react';
 
-const TeamMemberCard = ({ name, title, bio, imageUrl }: { name: string, title: string, bio: string, imageUrl: string }) => (
+// FIX: Extracted props into a dedicated interface for better type safety and clarity.
+interface TeamMemberCardProps {
+  name: string;
+  title: string;
+  bio: string;
+  imageUrl: string;
+}
+
+// FIX: Defined the component as a React.FC to resolve the TypeScript error with the `key` prop.
+const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ name, title, bio, imageUrl }) => (
   <div className="bg-white rounded-lg shadow-lg overflow-hidden text-center p-6 transform transition duration-500 hover:scale-105">
     <img className="mx-auto h-40 w-40 rounded-full object-cover mb-4" src={imageUrl} alt={name} />
     <h3 className="text-xl font-semibold leading-7 tracking-tight text-gray-900">{name}</h3>
@@ -35,7 +44,13 @@ const TeamPage = () => {
         <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {teamMembers.map(member => (
-              <TeamMemberCard key={member.name} {...member} />
+              <TeamMemberCard
+                key={member.name}
+                name={member.name}
+                title={member.title}
+                bio={member.bio}
+                imageUrl={member.imageUrl}
+              />
             ))}
           </div>
         </div>

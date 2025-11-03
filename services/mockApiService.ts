@@ -1,4 +1,4 @@
-import { Product, User, Order, OrderStatus, NewProduct, CartItem, ShippingAddress, Conversation, Message, Review, NewReview, AITopic } from '../types';
+import { Product, User, Order, OrderStatus, NewProduct, CartItem, ShippingAddress, Conversation, Message, Review, NewReview, AITopic, Page, NewPage } from '../types';
 
 const mockProducts: Product[] = [
   // Electronics
@@ -124,7 +124,7 @@ let mockConversations: Conversation[] = [
 ];
 
 
-const mockUsers: User[] = [
+let mockUsers: User[] = [
     { id: '1', email: 'admin@example.com', password_bcrypt: 'password123', role: 'admin', status: 'active', mobile: '555-0101'},
     { id: '2', email: 'customer@example.com', password_bcrypt: 'password123', role: 'customer', status: 'active', mobile: '555-0102'},
     { id: '3', email: 'blocked@example.com', password_bcrypt: 'password123', role: 'customer', status: 'blocked'},
@@ -138,6 +138,103 @@ let mockAITopics: AITopic[] = [
     { id: '3', topic: 'Return Policy', enabled: true },
     { id: '4', topic: 'Technical Support', enabled: false },
     { id: '5', topic: 'Account Issues', enabled: false },
+];
+
+let mockPages: Page[] = [
+    {
+        id: 'page-1',
+        title: 'About Us',
+        slug: 'about',
+        content: [
+            {
+                id: 'el-1',
+                type: 'heading',
+                content: 'Our Story',
+                styles: { 
+                    paddingTop: '20px', 
+                    paddingBottom: '10px',
+                    fontSize: '48px', 
+                    fontWeight: 'bold', 
+                    color: '#1e3a8a',
+                    textAlign: 'center'
+                }
+            },
+            {
+                id: 'el-2',
+                type: 'text',
+                content: 'Founded in 2024, Zenith was born from a passion for cutting-edge technology and minimalist design. We believe that the right tools can not only enhance productivity but also bring joy and inspiration to everyday life.',
+                styles: { 
+                    paddingTop: '10px',
+                    paddingBottom: '20px',
+                    fontSize: '18px', 
+                    lineHeight: '1.6',
+                    textAlign: 'center',
+                    maxWidth: '800px',
+                    margin: '0 auto'
+                }
+            },
+            {
+                id: 'el-3',
+                type: 'image',
+                content: 'https://picsum.photos/seed/about/800/400',
+                styles: { 
+                    width: '100%',
+                    maxWidth: '800px',
+                    height: 'auto',
+                    margin: '0 auto',
+                    borderRadius: '12px'
+                }
+            }
+        ],
+        status: 'published',
+        createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
+        updatedAt: new Date().toISOString(),
+    },
+    {
+        id: 'page-2',
+        title: 'Our Team',
+        slug: 'team',
+        content: [],
+        status: 'published',
+        createdAt: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000).toISOString(),
+        updatedAt: new Date().toISOString(),
+    },
+     {
+        id: 'page-3',
+        title: 'Contact Us',
+        slug: 'contact',
+        content: [],
+        status: 'published',
+        createdAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(),
+        updatedAt: new Date().toISOString(),
+    },
+    {
+        id: 'page-4',
+        title: 'Privacy Policy',
+        slug: 'privacy-policy',
+        content: [],
+        status: 'published',
+        createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+        updatedAt: new Date().toISOString(),
+    },
+    {
+        id: 'page-5',
+        title: 'Terms of Service',
+        slug: 'terms-of-service',
+        content: [],
+        status: 'published',
+        createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+        updatedAt: new Date().toISOString(),
+    },
+    {
+        id: 'page-6',
+        title: 'Return Policy',
+        slug: 'return-policy',
+        content: [],
+        status: 'published',
+        createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+        updatedAt: new Date().toISOString(),
+    },
 ];
 
 const simulateDelay = <T,>(data: T): Promise<T> =>
@@ -273,6 +370,33 @@ export const api = {
     mockUsers.push(newUser);
     return simulateDelay(newUser);
   },
+  forgotPassword: (email: string) => {
+    const user = mockUsers.find(u => u.email === email);
+    if (user) {
+        // In a real app, generate a secure token, save it with an expiry, and email it.
+        // For this mock, we'll just log the "token" to the console.
+        // The "token" will be the user's email encoded in base64 for simplicity.
+        const token = btoa(email);
+        console.log(`Password reset requested for ${email}.`);
+        console.log(`Reset link: /#/reset-password/${token}`);
+    }
+    // Always resolve successfully to prevent email enumeration attacks.
+    return simulateDelay({ success: true, message: 'If your email is in our system, you will receive a reset link.' });
+  },
+  resetPassword: (token: string, newPassword_bcrypt: string): Promise<{ success: boolean; message?: string }> => {
+      try {
+          const email = atob(token); // Decode the "token" to get the email
+          const userIndex = mockUsers.findIndex(u => u.email === email);
+          if (userIndex > -1) {
+              mockUsers[userIndex].password_bcrypt = newPassword_bcrypt;
+              return simulateDelay({ success: true });
+          }
+      } catch (e) {
+          // Invalid base64 token
+          return simulateDelay({ success: false, message: 'Invalid token.' });
+      }
+      return simulateDelay({ success: false, message: 'Invalid or expired token.' });
+  },
   getCategories: () => simulateDelay([...new Set(mockProducts.map(p => p.category))]),
   
   // Conversation API
@@ -381,5 +505,47 @@ export const api = {
       return simulateDelay(true);
     }
     return simulateDelay(false);
+  },
+  
+    // Page CMS API
+  getPages: () => simulateDelay([...mockPages]),
+  getPageById: (pageId: string) => {
+      const page = mockPages.find(p => p.id === pageId);
+      return simulateDelay(page ? { ...page } : undefined);
+  },
+  getPageBySlug: (slug: string) => {
+      const page = mockPages.find(p => p.slug === slug && p.status === 'published');
+      return simulateDelay(page ? { ...page } : undefined);
+  },
+  createPage: (pageData: NewPage) => {
+      const now = new Date().toISOString();
+      const newPage: Page = {
+          id: `page-${Date.now()}`,
+          ...pageData,
+          createdAt: now,
+          updatedAt: now,
+      };
+      mockPages.push(newPage);
+      return simulateDelay(newPage);
+  },
+  updatePage: (pageId: string, updatedData: Partial<Page>) => {
+      const pageIndex = mockPages.findIndex(p => p.id === pageId);
+      if (pageIndex > -1) {
+          mockPages[pageIndex] = { 
+              ...mockPages[pageIndex], 
+              ...updatedData,
+              updatedAt: new Date().toISOString() 
+          };
+          return simulateDelay(mockPages[pageIndex]);
+      }
+      return simulateDelay(null);
+  },
+  deletePage: (pageId: string) => {
+      const pageIndex = mockPages.findIndex(p => p.id === pageId);
+      if (pageIndex > -1) {
+          mockPages.splice(pageIndex, 1);
+          return simulateDelay(true);
+      }
+      return simulateDelay(false);
   },
 };

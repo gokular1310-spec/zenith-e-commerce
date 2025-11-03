@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, ReactNode, useEffect } from 'react';
+import React, { createContext, useReducer, useEffect, PropsWithChildren } from 'react';
 import { CartItem, Product } from '../types';
 
 type CartState = {
@@ -66,7 +66,8 @@ const getInitialState = (): CartState => {
   return savedCart ? JSON.parse(savedCart) : initialState;
 };
 
-export const CartProvider = ({ children }: { children: ReactNode }) => {
+// FIX: Switched to PropsWithChildren to resolve type inference issues with the 'children' prop.
+export const CartProvider = ({ children }: PropsWithChildren) => {
   const [state, dispatch] = useReducer(cartReducer, getInitialState());
 
   useEffect(() => {

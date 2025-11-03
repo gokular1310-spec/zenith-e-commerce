@@ -1,3 +1,5 @@
+import React from 'react';
+
 export interface Review {
   id: number;
   author: string;
@@ -92,3 +94,30 @@ export interface AITopic {
   topic: string;
   enabled: boolean;
 }
+
+
+// Types for the new Block-Based Page Builder
+export type ElementType = 'heading' | 'text' | 'button' | 'image' | 'spacer';
+
+export type ElementStyles = React.CSSProperties;
+
+export interface EditorElement {
+  id: string;
+  type: ElementType;
+  content: string; // Text content, button label, or image src
+  styles: ElementStyles;
+}
+
+
+// Updated types for the Page CMS
+export interface Page {
+  id: string;
+  title: string;
+  slug: string; // URL-friendly identifier
+  content: EditorElement[]; // Content is now an array of structured elements
+  status: 'published' | 'draft';
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type NewPage = Omit<Page, 'id' | 'createdAt' | 'updatedAt'>;

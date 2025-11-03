@@ -3,6 +3,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { useCart } from '../../hooks/useCart';
 import { api } from '../../services/mockApiService';
+import ThemeSwitcher from './ThemeSwitcher';
 
 const ShoppingCartIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -46,8 +47,8 @@ const Header = () => {
 
   const categoryLinks = (isMobile = false) => {
     const baseClass = isMobile
-      ? "block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-100"
-      : "text-gray-600 hover:text-primary-600 font-medium px-3 py-2 rounded-md text-sm transition";
+      ? "block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 hover:bg-gray-100 dark:hover:bg-gray-600"
+      : "text-gray-600 dark:text-gray-300 hover:text-primary-600 font-medium px-3 py-2 rounded-md text-sm transition";
 
     return (
         <>
@@ -65,7 +66,7 @@ const Header = () => {
 
 
   return (
-    <header className="bg-white shadow-md sticky top-0 z-50">
+    <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
@@ -73,17 +74,18 @@ const Header = () => {
                 <svg className="h-8 w-auto" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5-10-5-10 5z"/>
                 </svg>
-                <span className="text-2xl font-bold">Zenith</span>
+                <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">Zenith</span>
             </Link>
           </div>
           <nav className="hidden md:flex md:space-x-8">
-             <NavLink to="/" className="text-gray-500 hover:text-gray-900" style={({ isActive }) => isActive ? activeLinkStyle : undefined}>Home</NavLink>
-             <NavLink to="/about" className="text-gray-500 hover:text-gray-900" style={({ isActive }) => isActive ? activeLinkStyle : undefined}>About</NavLink>
-             <NavLink to="/team" className="text-gray-500 hover:text-gray-900" style={({ isActive }) => isActive ? activeLinkStyle : undefined}>Team</NavLink>
-             <NavLink to="/contact" className="text-gray-500 hover:text-gray-900" style={({ isActive }) => isActive ? activeLinkStyle : undefined}>Contact</NavLink>
+             <NavLink to="/" className="text-gray-500 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white" style={({ isActive }) => isActive ? activeLinkStyle : undefined}>Home</NavLink>
+             <NavLink to="/about" className="text-gray-500 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white" style={({ isActive }) => isActive ? activeLinkStyle : undefined}>About</NavLink>
+             <NavLink to="/team" className="text-gray-500 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white" style={({ isActive }) => isActive ? activeLinkStyle : undefined}>Team</NavLink>
+             <NavLink to="/contact" className="text-gray-500 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white" style={({ isActive }) => isActive ? activeLinkStyle : undefined}>Contact</NavLink>
           </nav>
           <div className="flex items-center space-x-4">
-            <Link to="/cart" className="relative text-gray-500 hover:text-gray-900">
+            <ThemeSwitcher />
+            <Link to="/cart" className="relative text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
               <ShoppingCartIcon />
               {totalItems > 0 && (
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">{totalItems}</span>
@@ -91,21 +93,21 @@ const Header = () => {
             </Link>
             {user ? (
                 <div className="relative group">
-                    <button className="text-gray-500 hover:text-gray-900"><UserIcon /></button>
-                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-20 hidden group-hover:block">
-                        <div className="px-4 py-2 text-sm text-gray-700 border-b">{user.email}</div>
-                        <Link to="/my-profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Profile</Link>
+                    <button className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"><UserIcon /></button>
+                    <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg py-1 z-20 hidden group-hover:block">
+                        <div className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200 border-b border-gray-200 dark:border-gray-600">{user.email}</div>
+                        <Link to="/my-profile" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600">My Profile</Link>
                         {user.role === 'admin' && (
-                            <Link to="/admin" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 border-t">Admin Panel</Link>
+                            <Link to="/admin" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 border-t border-gray-200 dark:border-gray-600">Admin Panel</Link>
                         )}
                          {user.role === 'sub-admin' && (
-                            <Link to="/sub-admin" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 border-t">Vendor Panel</Link>
+                            <Link to="/sub-admin" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 border-t border-gray-200 dark:border-gray-600">Vendor Panel</Link>
                         )}
                     </div>
                 </div>
             ) : (
                 <div className="flex items-center space-x-2">
-                    <Link to="/login" className="text-sm font-medium text-gray-500 hover:text-primary-600 px-3 py-2 rounded-md">
+                    <Link to="/login" className="text-sm font-medium text-gray-500 dark:text-gray-300 hover:text-primary-600 px-3 py-2 rounded-md">
                         Sign in
                     </Link>
                     <Link to="/register" className="text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 px-3 py-2 rounded-md">
@@ -117,7 +119,7 @@ const Header = () => {
         </div>
       </div>
        {categories.length > 0 && (
-        <nav className="bg-gray-100 border-t border-b border-gray-200">
+        <nav className="bg-gray-100 dark:bg-gray-700 border-t border-b border-gray-200 dark:border-gray-600">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Desktop Menu */}
                 <div className="hidden md:flex items-center justify-center h-12 space-x-6">
@@ -128,7 +130,7 @@ const Header = () => {
                 <div className="md:hidden">
                     <button
                         onClick={() => setIsCategoryMenuOpen(!isCategoryMenuOpen)}
-                        className="w-full text-left py-3 font-medium text-gray-700 flex justify-between items-center"
+                        className="w-full text-left py-3 font-medium text-gray-700 dark:text-gray-300 flex justify-between items-center"
                         aria-expanded={isCategoryMenuOpen}
                     >
                         <span>Browse Categories</span>
