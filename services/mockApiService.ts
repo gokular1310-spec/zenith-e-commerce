@@ -284,11 +284,11 @@ let mockConversations: Conversation[] = [
 
 
 let mockUsers: User[] = [
-    { id: '1', email: 'admin@example.com', password_bcrypt: 'password123', role: 'admin', status: 'active', mobile: '555-0101'},
-    { id: '2', email: 'customer@example.com', password_bcrypt: 'password123', role: 'customer', status: 'active', mobile: '555-0102'},
-    { id: '3', email: 'blocked@example.com', password_bcrypt: 'password123', role: 'customer', status: 'blocked'},
-    { id: '4', email: 'jane.s@example.com', password_bcrypt: 'password123', role: 'customer', status: 'active', mobile: '555-0103'},
-    { id: '5', email: 'subadmin@example.com', password_bcrypt: 'password123', role: 'sub-admin', status: 'active', mobile: '555-0104'},
+    { id: '1', email: 'admin@example.com', password_bcrypt: 'password123', role: 'admin', status: 'active', mobile: '555-0101', wishlist: [] },
+    { id: '2', email: 'customer@example.com', password_bcrypt: 'password123', role: 'customer', status: 'active', mobile: '555-0102', wishlist: [1, 15, 18] },
+    { id: '3', email: 'blocked@example.com', password_bcrypt: 'password123', role: 'customer', status: 'blocked', wishlist: [] },
+    { id: '4', email: 'jane.s@example.com', password_bcrypt: 'password123', role: 'customer', status: 'active', mobile: '555-0103', wishlist: [9] },
+    { id: '5', email: 'subadmin@example.com', password_bcrypt: 'password123', role: 'sub-admin', status: 'active', mobile: '555-0104', wishlist: [] },
 ];
 
 let mockAITopics: AITopic[] = [
@@ -625,6 +625,7 @@ export const api = {
         role: 'customer',
         status: 'pending_verification',
         verificationToken,
+        wishlist: [],
     };
     mockUsers.push(newUser);
     console.log(`Verification link for ${email}: /#/verify-email/${verificationToken}`);
@@ -744,7 +745,8 @@ export const api = {
         email: userData.email,
         password_bcrypt: userData.password_bcrypt,
         role: userData.role,
-        status: 'active'
+        status: 'active',
+        wishlist: [],
     };
     mockUsers.push(newUser);
     return simulateDelay(newUser);
@@ -960,5 +962,34 @@ export const api = {
   getInspiredByHistory: () => {
     const shuffled = [...mockProducts].sort(() => 0.5 - Math.random());
     return simulateDelay(shuffled.slice(0, 8));
+  },
+
+  // Wishlist API
+  getWishlist: (userEmail: string): Promise<number[]> => {
+    const user = mockUsers.find(u => u.email === userEmail);
+    if (user && user.wishlist) {
+      return simulateDelay([...user.wishlist]);
+    }
+    return simulateDelay([]);
+  },
+  addToWishlist: (userEmail: string, productId: number): Promise<boolean> => {
+    const userIndex = mockUsers.findIndex(u => u.email === userEmail);
+    if (userIndex > -1) {
+      const user = mockUsers[userIndex];
+      if (!user.wishlist.includes(productId)) {
+        user.wishlist.push(productId);
+      }
+      return simulateDelay(true);
+    }
+    return simulateDelay(false);
+  },
+  removeFromWishlist: (userEmail: string, productId: number): Promise<boolean> => {
+    const userIndex = mockUsers.findIndex(u => u.email === userEmail);
+    if (userIndex > -1) {
+      const user = mockUsers[userIndex];
+      mockUsers[userIndex].wishlist = user.wishlist.filter(id => id !== productId);
+      return simulateDelay(true);
+    }
+    return simulateDelay(false);
   },
 };

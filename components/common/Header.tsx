@@ -27,7 +27,7 @@ const SearchIcon = () => (
 );
 
 const Header = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const { totalItems } = useCart();
   const { activeThemeSettings } = useSiteAppearance();
   const [categoryTree, setCategoryTree] = useState<{ [key: string]: string[] }>({});
@@ -186,12 +186,14 @@ const Header = () => {
                       <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg py-1 z-20 hidden group-hover:block">
                           <div className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200 border-b border-gray-200 dark:border-gray-600">{user.email}</div>
                           <Link to="/my-profile" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600">My Profile</Link>
+                          <Link to="/my-wishlist" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600">My Wishlist</Link>
                           {user.role === 'admin' && (
                               <Link to="/admin" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 border-t border-gray-200 dark:border-gray-600">Admin Panel</Link>
                           )}
                            {user.role === 'sub-admin' && (
                               <Link to="/sub-admin" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 border-t border-gray-200 dark:border-gray-600">Vendor Panel</Link>
                           )}
+                          <button onClick={logout} className="w-full text-left block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 border-t border-gray-200 dark:border-gray-600">Logout</button>
                       </div>
                   </div>
               ) : (
@@ -290,6 +292,7 @@ const Header = () => {
                 <div className="space-y-2">
                       <div className="font-medium text-gray-800 dark:text-gray-200">{user.email}</div>
                       <Link to="/my-profile" className="block text-sm text-gray-600 dark:text-gray-300 hover:text-primary-600" onClick={() => setIsMobileMenuOpen(false)}>My Profile</Link>
+                      <Link to="/my-wishlist" className="block text-sm text-gray-600 dark:text-gray-300 hover:text-primary-600" onClick={() => setIsMobileMenuOpen(false)}>My Wishlist</Link>
                       {user.role === 'admin' && (
                         <Link to="/admin" className="block text-sm text-gray-600 dark:text-gray-300 hover:text-primary-600" onClick={() => setIsMobileMenuOpen(false)}>Admin Panel</Link>
                     )}

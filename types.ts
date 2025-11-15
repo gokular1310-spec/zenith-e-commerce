@@ -35,6 +35,7 @@ export interface User {
   status: 'active' | 'blocked' | 'pending_verification';
   verificationToken?: string;
   mobile?: string;
+  wishlist: number[];
 }
 
 export enum OrderStatus {

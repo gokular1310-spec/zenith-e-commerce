@@ -1,17 +1,28 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Product } from '../../types';
 import { useCart } from '../../hooks/useCart';
 import Button from '../common/Button';
 import { useComparison } from '../../hooks/useComparison';
+import { useWishlist } from '../../hooks/useWishlist';
+import { useAuth } from '../../hooks/useAuth';
 
 interface ProductCardProps {
   product: Product;
 }
 
+const HeartIcon = ({ filled }: { filled: boolean }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={`h-6 w-6 transition-all duration-200 ${filled ? 'text-red-500' : 'text-gray-300 hover:text-red-500'}`} fill={filled ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={filled ? 1 : 1.5} d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.672l1.318-1.354a4.5 4.5 0 116.364 6.364L12 20.364l-7.682-7.682a4.5 4.5 0 010-6.364z" />
+    </svg>
+);
+
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { addItem } = useCart();
   const { items: comparisonItems, addItem: addCompareItem, removeItem: removeCompareItem, isFull } = useComparison();
+  const { user } = useAuth();
+  const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
+  const navigate = useNavigate();
   
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -26,13 +37,28 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const canAddToCompare = !isFull || isInCompare;
 
   const handleCompareChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      e.preventDefault();
       e.stopPropagation();
       if (e.target.checked) {
           addCompareItem(product);
       } else {
           removeCompareItem(product.id);
       }
+  };
+  
+  const isProductInWishlist = isInWishlist(product.id);
+
+  const handleWishlistToggle = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!user) {
+        navigate('/login');
+        return;
+    }
+    if (isProductInWishlist) {
+        removeFromWishlist(product.id);
+    } else {
+        addToWishlist(product.id);
+    }
   };
 
   return (
@@ -45,7 +71,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                   {discountPercent}% OFF
               </div>
           )}
-          <div className="absolute top-2 right-2" onClick={(e) => e.stopPropagation()}>
+          <button 
+              onClick={handleWishlistToggle}
+              className="absolute top-2 right-2 bg-white/70 dark:bg-gray-900/50 backdrop-blur-sm rounded-full p-1.5 z-10 transition-colors"
+              aria-label={isProductInWishlist ? "Remove from wishlist" : "Add to wishlist"}
+          >
+              <HeartIcon filled={isProductInWishlist} />
+          </button>
+          <div className="absolute bottom-2 right-2 z-10" onClick={(e) => {e.preventDefault(); e.stopPropagation();}}>
             <label htmlFor={`compare-${product.id}`} className="flex items-center bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded-full cursor-pointer hover:bg-opacity-75 transition-colors" title={!canAddToCompare ? 'Maximum 4 products for comparison' : ''}>
                 <input
                     id={`compare-${product.id}`}

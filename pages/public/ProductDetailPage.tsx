@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Product, Review } from '../../types';
 import { api } from '../../services/mockApiService';
 import { useCart } from '../../hooks/useCart';
@@ -8,6 +8,8 @@ import Button from '../../components/common/Button';
 import ProductCard from '../../components/public/ProductCard';
 import ProductReviews from '../../components/public/ProductReviews';
 import { useComparison } from '../../hooks/useComparison';
+import { useWishlist } from '../../hooks/useWishlist';
+import { useAuth } from '../../hooks/useAuth';
 
 const ProductDetailPage = () => {
   const { productId } = useParams<{ productId: string }>();
@@ -17,6 +19,9 @@ const ProductDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const { addItem } = useCart();
   const { items: comparisonItems, addItem: addCompareItem, removeItem: removeCompareItem, isFull } = useComparison();
+  const { user } = useAuth();
+  const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!productId) return;
@@ -84,6 +89,19 @@ const ProductDetailPage = () => {
           addCompareItem(product);
       }
   };
+  
+  const isProductInWishlist = isInWishlist(product.id);
+  const handleWishlistToggle = () => {
+    if (!user) {
+        navigate('/login');
+        return;
+    }
+    if (isProductInWishlist) {
+        removeFromWishlist(product.id);
+    } else {
+        addToWishlist(product.id);
+    }
+  };
 
   return (
     <div className="space-y-12">
@@ -126,9 +144,12 @@ const ProductDetailPage = () => {
                 )}
             </div>
             <p className="mt-6 text-gray-600 leading-relaxed">{product.description}</p>
-            <div className="mt-8 flex items-center gap-4">
+            <div className="mt-8 flex flex-wrap items-center gap-4">
               <Button onClick={handleAddToCart} className="text-lg py-3 px-6">
                 Add to Cart
+              </Button>
+              <Button variant="secondary" onClick={handleWishlistToggle} className="text-lg py-3 px-6">
+                {isProductInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}
               </Button>
               <Button 
                 variant="secondary" 
