@@ -16,6 +16,7 @@ export interface Product {
   description: string;
   price: number;
   category: string;
+  subCategory?: string;
   imageUrl: string;
   stock: number;
   specs?: { [key: string]: string };
@@ -146,4 +147,13 @@ export interface SavedTheme extends ThemeSettings {
   id: string;
   name: string;
   isActive: boolean;
+}
+
+
+export interface JobOpening {
+  id: string;
+  title: string;
+  department: string;
+  location: string;
+  description: string;
 }

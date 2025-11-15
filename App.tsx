@@ -29,6 +29,10 @@ import ContactPage from './pages/public/ContactPage';
 import ReturnPolicyPage from './pages/public/ReturnPolicyPage';
 import PrivacyPolicyPage from './pages/public/PrivacyPolicyPage';
 import TermsOfServicePage from './pages/public/TermsOfServicePage';
+import ComingSoonPage from './pages/public/ComingSoonPage';
+import DealsPage from './pages/public/DealsPage';
+import CareersPage from './pages/public/CareersPage';
+import SearchResultsPage from './pages/public/SearchResultsPage';
 
 
 import ProtectedRoute from './layouts/ProtectedRoute';
@@ -82,6 +86,7 @@ const AppRoutes = () => {
               <Route path="register" element={<RegisterPage />} />
               <Route path="forgot-password" element={<ForgotPasswordPage />} />
               <Route path="reset-password/:token" element={<ResetPasswordPage />} />
+              <Route path="search" element={<SearchResultsPage />} />
               
               {/* CMS-driven pages */}
               <Route path="pages/:slug" element={<DynamicPage />} />
@@ -93,6 +98,9 @@ const AppRoutes = () => {
               <Route path="return-policy" element={<ReturnPolicyPage />} />
               <Route path="privacy-policy" element={<PrivacyPolicyPage />} />
               <Route path="terms-of-service" element={<TermsOfServicePage />} />
+              <Route path="coming-soon" element={<ComingSoonPage />} />
+              <Route path="deals" element={<DealsPage />} />
+              <Route path="careers" element={<CareersPage />} />
 
 
               {/* Customer Protected Routes */}
