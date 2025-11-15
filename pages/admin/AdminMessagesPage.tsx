@@ -32,24 +32,24 @@ const AdminMessagesPage = () => {
   }
 
   return (
-    <div className="bg-gray-800 shadow-lg rounded-lg p-6">
-      <h2 className="text-2xl font-bold text-gray-100 mb-6">Customer Conversations</h2>
+    <div className="bg-white shadow-md rounded-lg p-6">
+      <h2 className="text-2xl font-bold text-gray-900 mb-6">Customer Conversations</h2>
       {conversations.length === 0 ? (
-        <p className="text-gray-400 text-center py-8">There are no customer conversations.</p>
+        <p className="text-gray-500 text-center py-8">There are no customer conversations.</p>
       ) : (
         <div className="space-y-4">
           {conversations.map(convo => (
-            <Link key={convo.id} to={`/admin/messages/${convo.id}`} className="block bg-gray-700 rounded-lg p-4 shadow-md hover:bg-gray-600 transition-colors duration-200">
+            <Link key={convo.id} to={`/admin/messages/${convo.id}`} className="block bg-white rounded-lg p-4 border border-gray-200 shadow-sm hover:shadow-md hover:border-primary-300 transition-all duration-200">
               <div className="flex justify-between items-start">
                 <div>
-                  <p className="font-semibold text-white">{convo.subject}</p>
-                  <p className="text-sm text-primary-400">{convo.customerEmail}</p>
+                  <p className="font-semibold text-gray-800">{convo.subject}</p>
+                  <p className="text-sm text-primary-600">{convo.customerEmail}</p>
                 </div>
                 <div className="text-right flex-shrink-0 ml-4">
-                  <span className={`px-2 py-1 text-xs font-semibold rounded-full ${convo.status === 'open' ? 'bg-green-500 text-green-900' : 'bg-gray-500 text-gray-900'}`}>
+                  <span className={`px-2 py-1 text-xs font-semibold rounded-full ${convo.status === 'open' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
                     {convo.status}
                   </span>
-                  <p className="text-xs text-gray-400 mt-1">{new Date(convo.lastUpdatedAt).toLocaleString()}</p>
+                  <p className="text-xs text-gray-500 mt-1">{new Date(convo.lastUpdatedAt).toLocaleString()}</p>
                 </div>
               </div>
             </Link>

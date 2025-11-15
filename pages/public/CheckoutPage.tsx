@@ -97,14 +97,14 @@ const CheckoutPage = () => {
                   <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
                 </div>
               </div>
-              <p className="font-medium text-gray-800">${(item.price * item.quantity).toFixed(2)}</p>
+              <p className="font-medium text-gray-800">₹{(item.price * item.quantity).toFixed(2)}</p>
             </div>
           ))}
         </div>
         <div className="border-t border-gray-200 mt-6 pt-6">
           <div className="flex justify-between text-lg font-medium text-gray-900">
             <span>Total</span>
-            <span>${totalPrice.toFixed(2)}</span>
+            <span>₹{totalPrice.toFixed(2)}</span>
           </div>
         </div>
       </div>

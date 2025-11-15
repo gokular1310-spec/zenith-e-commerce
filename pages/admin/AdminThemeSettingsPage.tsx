@@ -112,8 +112,8 @@ const AdminThemeSettingsPage = () => {
     }
 
     return (
-        <div className="bg-gray-800 shadow-lg rounded-lg p-6 text-gray-300">
-            <h2 className="text-2xl font-bold text-gray-100 mb-6">Theme Customizer</h2>
+        <div className="bg-white shadow-md rounded-lg p-6 text-gray-700">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Theme Customizer</h2>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Editor Panel */}
@@ -126,12 +126,12 @@ const AdminThemeSettingsPage = () => {
                 <div className="lg:col-span-2 space-y-6">
                     {/* Live Preview */}
                     <div>
-                        <h3 className="text-xl font-semibold mb-2 text-white">Live Preview</h3>
-                        <div className="border border-gray-600 rounded-lg overflow-hidden">
+                        <h3 className="text-xl font-semibold mb-2 text-gray-800">Live Preview</h3>
+                        <div className="border border-gray-200 rounded-lg overflow-hidden">
                             <div style={generateBackgroundStyle(currentSettings.header)} className="p-4 text-center font-bold" >
                                 <p style={{ color: currentSettings.header.textColor }}>Header Preview</p>
                             </div>
-                            <div className="p-8 bg-gray-700 text-center text-sm">
+                            <div className="p-8 bg-gray-100 text-center text-sm">
                                 <p>Page Content Area</p>
                             </div>
                             <div style={generateBackgroundStyle(currentSettings.footer)} className="p-4 text-center text-sm">
@@ -141,20 +141,20 @@ const AdminThemeSettingsPage = () => {
                     </div>
 
                     {/* Saved Themes */}
-                    <div className="bg-gray-700 p-4 rounded-lg">
-                         <h3 className="text-xl font-semibold mb-4 text-white">Save & Manage Themes</h3>
+                    <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                         <h3 className="text-xl font-semibold mb-4 text-gray-800">Save & Manage Themes</h3>
                          <div className="flex gap-2 mb-4">
-                            <input type="text" value={newThemeName} onChange={e => setNewThemeName(e.target.value)} placeholder="New theme name..." className="flex-grow bg-gray-800 border border-gray-600 rounded-md px-3 py-2 focus:ring-primary-500 focus:border-primary-500 text-white" />
+                            <input type="text" value={newThemeName} onChange={e => setNewThemeName(e.target.value)} placeholder="New theme name..." className="flex-grow bg-white border border-gray-300 rounded-md px-3 py-2 focus:ring-primary-500 focus:border-primary-500 text-gray-900" />
                             <Button onClick={handleSaveTheme}>Save Current</Button>
                          </div>
                          <div className="space-y-2">
                             {savedThemes.map(theme => (
-                                <div key={theme.id} className="flex justify-between items-center bg-gray-800 p-2 rounded">
-                                    <p className="font-medium text-white">{theme.name} {theme.isActive && <span className="text-xs text-green-400 ml-2">(Active)</span>}</p>
+                                <div key={theme.id} className="flex justify-between items-center bg-white p-2 rounded border border-gray-200">
+                                    <p className="font-medium text-gray-800">{theme.name} {theme.isActive && <span className="text-xs text-green-600 ml-2">(Active)</span>}</p>
                                     <div className="flex gap-2">
                                         <Button variant="secondary" className="!px-2 !py-1 text-xs" onClick={() => handleLoadTheme(theme)}>Load</Button>
-                                        <Button variant="secondary" className="!px-2 !py-1 text-xs bg-green-600 hover:bg-green-700 text-white" onClick={() => handleSetActiveTheme(theme.id)} disabled={theme.isActive}>Apply</Button>
-                                        <Button variant="secondary" className="!px-2 !py-1 text-xs bg-red-600 hover:bg-red-700 text-white" onClick={() => handleDeleteTheme(theme.id)} disabled={theme.isActive}>Delete</Button>
+                                        <Button variant="secondary" className="!px-2 !py-1 text-xs bg-green-100 text-green-700 hover:bg-green-200" onClick={() => handleSetActiveTheme(theme.id)} disabled={theme.isActive}>Apply</Button>
+                                        <Button variant="secondary" className="!px-2 !py-1 text-xs bg-red-100 text-red-700 hover:bg-red-200" onClick={() => handleDeleteTheme(theme.id)} disabled={theme.isActive}>Delete</Button>
                                     </div>
                                 </div>
                             ))}
@@ -176,11 +176,11 @@ interface ThemeEditorSectionProps {
 const ThemeEditorSection: React.FC<ThemeEditorSectionProps> = ({ title, settings, onBackgroundChange, onTextColorChange }) => {
     const gradientDirections = ['to top', 'to right', 'to bottom', 'to left', 'to top right', 'to bottom right', 'to bottom left', 'to top left'];
     return (
-        <div className="bg-gray-700 p-4 rounded-lg space-y-4">
-            <h3 className="font-semibold text-white">{title}</h3>
+        <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 space-y-4">
+            <h3 className="font-semibold text-gray-800">{title}</h3>
             <div>
                 <label className="text-sm">Background Type</label>
-                <select value={settings.background.type} onChange={e => onBackgroundChange('type', e.target.value)} className="w-full mt-1 bg-gray-800 border border-gray-600 rounded-md px-3 py-1 text-white">
+                <select value={settings.background.type} onChange={e => onBackgroundChange('type', e.target.value)} className="w-full mt-1 bg-white border border-gray-300 rounded-md px-3 py-1 text-gray-900">
                     <option value="solid">Solid Color</option>
                     <option value="gradient">Gradient</option>
                 </select>
@@ -197,7 +197,7 @@ const ThemeEditorSection: React.FC<ThemeEditorSectionProps> = ({ title, settings
                     </div>
                      <div>
                         <label className="text-sm">Direction</label>
-                        <select value={settings.background.direction} onChange={e => onBackgroundChange('direction', e.target.value)} className="w-full mt-1 bg-gray-800 border border-gray-600 rounded-md px-3 py-1 text-white">
+                        <select value={settings.background.direction} onChange={e => onBackgroundChange('direction', e.target.value)} className="w-full mt-1 bg-white border border-gray-300 rounded-md px-3 py-1 text-gray-900">
                            {gradientDirections.map(dir => <option key={dir} value={dir}>{dir}</option>)}
                         </select>
                     </div>

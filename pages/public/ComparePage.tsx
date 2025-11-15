@@ -40,7 +40,7 @@ const ComparePage = () => {
                                         <img src={item.imageUrls[0]} alt={item.name} className="w-40 h-auto mx-auto mb-2 rounded-md" />
                                         <h3 className="font-bold text-primary-700 hover:underline">{item.name}</h3>
                                     </Link>
-                                    <p className="text-xl font-bold text-gray-800 my-2">${item.price.toFixed(2)}</p>
+                                    <p className="text-xl font-bold text-gray-800 my-2">₹{item.price.toFixed(2)}</p>
                                     <div className="flex flex-col gap-2 w-40 mx-auto">
                                         <Button onClick={() => addToCart(item)} className="w-full !text-sm">Add to Cart</Button>
                                         <Button variant="secondary" onClick={() => removeItem(item.id)} className="w-full !text-sm">Remove</Button>

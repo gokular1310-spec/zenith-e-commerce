@@ -97,9 +97,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <p className="text-sm text-gray-500 dark:text-gray-400">{product.category}</p>
           <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 flex-grow">
              <div className="flex items-baseline gap-2">
-                <p className="text-xl font-bold text-gray-900 dark:text-white">${product.price.toFixed(2)}</p>
+                <p className="text-xl font-bold text-gray-900 dark:text-white">₹{product.price.toFixed(2)}</p>
                 {isOnSale && (
-                    <p className="text-sm text-gray-500 dark:text-gray-400 line-through">${product.originalPrice?.toFixed(2)}</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 line-through">₹{product.originalPrice?.toFixed(2)}</p>
                 )}
              </div>
             <Button onClick={handleAddToCart}>

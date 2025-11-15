@@ -131,40 +131,40 @@ const AdminEditProductPage = () => {
     }
     
     return (
-        <div className="bg-gray-800 shadow-lg rounded-lg p-6">
-            <h2 className="text-2xl font-bold text-gray-100 mb-6">Edit Product</h2>
+        <div className="bg-white shadow-md rounded-lg p-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Edit Product</h2>
             <form onSubmit={handleSubmit} className="space-y-6">
                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">Product Name</label>
-                    <input type="text" id="name" name="name" value={formData.name || ''} onChange={handleChange} required className="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 focus:ring-primary-500 focus:border-primary-500 text-white" />
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
+                    <input type="text" id="name" name="name" value={formData.name || ''} onChange={handleChange} required className="w-full bg-gray-50 border border-gray-300 rounded-md px-3 py-2 focus:ring-primary-500 focus:border-primary-500 text-gray-900" />
                 </div>
                 <div>
-                    <label htmlFor="description" className="block text-sm font-medium text-gray-300 mb-1">Description</label>
-                    <textarea id="description" name="description" value={formData.description || ''} onChange={handleChange} required rows={6} className="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 focus:ring-primary-500 focus:border-primary-500 text-white"></textarea>
+                    <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                    <textarea id="description" name="description" value={formData.description || ''} onChange={handleChange} required rows={6} className="w-full bg-gray-50 border border-gray-300 rounded-md px-3 py-2 focus:ring-primary-500 focus:border-primary-500 text-gray-900"></textarea>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label htmlFor="originalPrice" className="block text-sm font-medium text-gray-300 mb-1">Original Price</label>
-                        <input type="number" id="originalPrice" name="originalPrice" value={formData.originalPrice || 0} onChange={handleChange} required min="0" step="0.01" className="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 focus:ring-primary-500 focus:border-primary-500 text-white" />
+                        <label htmlFor="originalPrice" className="block text-sm font-medium text-gray-700 mb-1">Original Price</label>
+                        <input type="number" id="originalPrice" name="originalPrice" value={formData.originalPrice || 0} onChange={handleChange} required min="0" step="0.01" className="w-full bg-gray-50 border border-gray-300 rounded-md px-3 py-2 focus:ring-primary-500 focus:border-primary-500 text-gray-900" />
                     </div>
                     <div>
-                        <label htmlFor="offerPrice" className="block text-sm font-medium text-gray-300 mb-1">Offer Price (Optional)</label>
-                        <input type="number" id="offerPrice" name="offerPrice" value={formData.offerPrice || ''} onChange={handleChange} min="0" step="0.01" placeholder="e.g., 89.99" className="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 focus:ring-primary-500 focus:border-primary-500 text-white" />
+                        <label htmlFor="offerPrice" className="block text-sm font-medium text-gray-700 mb-1">Offer Price (Optional)</label>
+                        <input type="number" id="offerPrice" name="offerPrice" value={formData.offerPrice || ''} onChange={handleChange} min="0" step="0.01" placeholder="e.g., 7499.00" className="w-full bg-gray-50 border border-gray-300 rounded-md px-3 py-2 focus:ring-primary-500 focus:border-primary-500 text-gray-900" />
                     </div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                      <div>
-                        <label htmlFor="stock" className="block text-sm font-medium text-gray-300 mb-1">Stock Quantity</label>
-                        <input type="number" id="stock" name="stock" value={formData.stock || 0} onChange={handleChange} required min="0" className="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 focus:ring-primary-500 focus:border-primary-500 text-white" />
+                        <label htmlFor="stock" className="block text-sm font-medium text-gray-700 mb-1">Stock Quantity</label>
+                        <input type="number" id="stock" name="stock" value={formData.stock || 0} onChange={handleChange} required min="0" className="w-full bg-gray-50 border border-gray-300 rounded-md px-3 py-2 focus:ring-primary-500 focus:border-primary-500 text-gray-900" />
                     </div>
                     <div>
-                        <label htmlFor="category" className="block text-sm font-medium text-gray-300 mb-1">Category</label>
-                        <input type="text" id="category" name="category" value={formData.category || ''} onChange={handleChange} required className="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 focus:ring-primary-500 focus:border-primary-500 text-white" />
+                        <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                        <input type="text" id="category" name="category" value={formData.category || ''} onChange={handleChange} required className="w-full bg-gray-50 border border-gray-300 rounded-md px-3 py-2 focus:ring-primary-500 focus:border-primary-500 text-gray-900" />
                     </div>
                 </div>
 
-                <div className="space-y-4 pt-4 border-t border-gray-700">
-                    <label className="block text-sm font-medium text-gray-300">Product Images</label>
+                <div className="space-y-4 pt-4 border-t border-gray-200">
+                    <label className="block text-sm font-medium text-gray-700">Product Images</label>
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                         {imageUrls.map((url, index) => (
                             <div key={index} className="relative group">
@@ -182,20 +182,20 @@ const AdminEditProductPage = () => {
                         ))}
                     </div>
                     <div>
-                        <label htmlFor="image-upload" className="block text-sm font-medium text-gray-300 mb-1">Add New Images</label>
+                        <label htmlFor="image-upload" className="block text-sm font-medium text-gray-700 mb-1">Add New Images</label>
                         <input 
                             id="image-upload"
                             type="file" 
                             multiple 
                             onChange={handleImageChange} 
                             accept="image/*"
-                            className="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100"
+                            className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100"
                         />
                     </div>
                 </div>
                 
                  <div className="mt-8 flex items-center justify-end">
-                    {error && <p className="text-red-400 mr-4 text-sm">{error}</p>}
+                    {error && <p className="text-red-500 mr-4 text-sm">{error}</p>}
                     <Button type="submit" disabled={isSubmitting}>
                         {isSubmitting ? <><Spinner/> Saving...</> : 'Save Changes'}
                     </Button>

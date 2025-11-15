@@ -53,7 +53,7 @@ const MyOrdersPage = () => {
                 <p className="text-sm text-gray-500">Placed on: {new Date(order.date).toLocaleDateString()}</p>
               </div>
               <div className="mt-2 sm:mt-0 text-right">
-                <p className="text-lg font-bold text-gray-900">${order.total.toFixed(2)}</p>
+                <p className="text-lg font-bold text-gray-900">₹{order.total.toFixed(2)}</p>
                 <p className="text-sm font-medium text-gray-600">{order.status}</p>
               </div>
             </div>

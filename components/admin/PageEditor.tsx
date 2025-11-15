@@ -23,10 +23,10 @@ const WIDGETS: { type: ElementType; name: string; icon: React.ReactElement }[] =
 
 const getDefaultElement = (type: ElementType): Omit<EditorElement, 'id'> => {
     switch (type) {
-        case 'heading': return { type, content: 'New Heading', styles: { fontSize: '24px', fontWeight: 'bold', textAlign: 'left', margin: '16px 0' } };
-        case 'text': return { type, content: 'This is a new paragraph.', styles: { fontSize: '16px', textAlign: 'left', margin: '16px 0' } };
-        case 'image': return { type, content: 'https://placehold.co/600x400', styles: { width: '100%', height: 'auto', margin: '16px 0' } };
-        case 'button': return { type, content: 'Click Me', styles: { backgroundColor: '#3b82f6', color: 'white', padding: '10px 20px', borderRadius: '5px', border: 'none', cursor: 'pointer', margin: '16px 0' } };
+        case 'heading': return { type, content: 'New Heading', styles: { fontSize: '24px', fontWeight: 'bold', color: '#111827', textAlign: 'left', marginTop: '16px', marginBottom: '16px' } };
+        case 'text': return { type, content: 'This is a new paragraph of text. You can edit this content in the inspector panel on the right.', styles: { fontSize: '16px', color: '#374151', textAlign: 'left', marginTop: '16px', marginBottom: '16px' } };
+        case 'image': return { type, content: 'https://placehold.co/600x400', styles: { width: '100%', height: 'auto', marginTop: '16px', marginBottom: '16px' } };
+        case 'button': return { type, content: 'Click Me', styles: { backgroundColor: '#2563eb', color: 'white', padding: '10px 20px', borderRadius: '5px', border: 'none', cursor: 'pointer', marginTop: '16px', marginBottom: '16px' } };
         case 'spacer': return { type, content: '', styles: { height: '50px' } };
     }
 };
@@ -45,22 +45,22 @@ const Inspector = ({ element, onUpdate, onClose }: { element: EditorElement | nu
     };
 
     return (
-        <div className="w-80 bg-gray-800 text-white text-sm overflow-y-auto p-4 space-y-6">
+        <div className="w-80 bg-white text-gray-800 text-sm overflow-y-auto p-4 space-y-6 border-l border-gray-200">
             <div className="flex justify-between items-center">
                  <h3 className="text-lg font-bold capitalize">{element.type} Settings</h3>
-                 <button onClick={onClose} className="text-gray-400 hover:text-white">&times;</button>
+                 <button onClick={onClose} className="text-gray-500 hover:text-gray-800">&times;</button>
             </div>
            
             {/* Content Section */}
             {(element.type === 'heading' || element.type === 'text' || element.type === 'button') && (
                 <InspectorSection title="Content">
-                    <textarea value={element.content} onChange={e => updateContent(e.target.value)} rows={3} className="w-full bg-gray-700 p-2 rounded mt-1 text-sm"/>
+                    <textarea value={element.content} onChange={e => updateContent(e.target.value)} rows={3} className="w-full bg-gray-100 p-2 rounded mt-1 text-sm border border-gray-300"/>
                 </InspectorSection>
             )}
              {element.type === 'image' && (
                 <InspectorSection title="Content">
                     <label className="text-xs">Image URL</label>
-                    <input type="text" value={element.content} onChange={e => updateContent(e.target.value)} className="w-full bg-gray-700 p-2 rounded mt-1 text-sm"/>
+                    <input type="text" value={element.content} onChange={e => updateContent(e.target.value)} className="w-full bg-gray-100 p-2 rounded mt-1 text-sm border border-gray-300"/>
                 </InspectorSection>
             )}
 
@@ -100,27 +100,27 @@ const Inspector = ({ element, onUpdate, onClose }: { element: EditorElement | nu
 
 // --- Inspector Helper Components ---
 const InspectorSection: React.FC<{ title: string, children: React.ReactNode }> = ({ title, children }) => (
-    <div className="border-b border-gray-700 pb-4">
-        <h4 className="font-semibold mb-2">{title}</h4>
+    <div className="border-b border-gray-200 pb-4">
+        <h4 className="font-semibold mb-2 text-gray-600">{title}</h4>
         <div className="space-y-2">{children}</div>
     </div>
 );
 const NumberInput = ({ label, value, onChange }: { label: string, value: number, onChange: (v: number) => void}) => (
     <div className="flex justify-between items-center">
         <label className="text-xs">{label}</label>
-        <input type="number" value={isNaN(value) ? '' : value} onChange={e => onChange(parseInt(e.target.value, 10))} className="w-20 bg-gray-700 p-1 rounded" />
+        <input type="number" value={isNaN(value) ? '' : value} onChange={e => onChange(parseInt(e.target.value, 10))} className="w-20 bg-gray-100 p-1 rounded border border-gray-300" />
     </div>
 );
 const ColorInput = ({ label, value, onChange }: { label: string, value: string, onChange: (v: string) => void}) => (
     <div className="flex justify-between items-center">
         <label className="text-xs">{label}</label>
-        <input type="color" value={value || '#ffffff'} onChange={e => onChange(e.target.value)} className="w-20 bg-gray-700 p-0 rounded h-6" />
+        <input type="color" value={value || '#ffffff'} onChange={e => onChange(e.target.value)} className="w-20 bg-transparent p-0 rounded h-6 border border-gray-300" />
     </div>
 );
 const SelectInput = ({ label, value, onChange, options }: { label: string, value: string, onChange: (v: string) => void, options: string[]}) => (
     <div className="flex justify-between items-center">
         <label className="text-xs">{label}</label>
-        <select value={value} onChange={e => onChange(e.target.value)} className="w-28 bg-gray-700 p-1 rounded capitalize">
+        <select value={value} onChange={e => onChange(e.target.value)} className="w-28 bg-gray-100 p-1 rounded capitalize border border-gray-300">
             {options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
         </select>
     </div>
@@ -134,7 +134,7 @@ const SpacingInput = ({ label, value, onChange }: { label: string, value: any, o
                 {directions.map(dir => (
                     <div key={dir} className="flex items-center">
                         <span className="text-xs capitalize w-10">{dir}</span>
-                        <input type="number" value={parseInt(value[dir] as string, 10) || 0} onChange={e => onChange(dir, parseInt(e.target.value))} className="w-full bg-gray-700 p-1 rounded" />
+                        <input type="number" value={parseInt(value[dir] as string, 10) || 0} onChange={e => onChange(dir, parseInt(e.target.value))} className="w-full bg-gray-100 p-1 rounded border border-gray-300" />
                     </div>
                 ))}
             </div>
@@ -145,9 +145,9 @@ const WidgetSelectionModal = ({ isOpen, onClose, onSelect }: { isOpen: boolean, 
     if (!isOpen) return null;
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center" onClick={onClose}>
-            <div className="bg-gray-800 rounded-lg p-6 w-full max-w-2xl grid grid-cols-3 gap-4" onClick={e => e.stopPropagation()}>
+            <div className="bg-white rounded-lg p-6 w-full max-w-2xl grid grid-cols-3 gap-4" onClick={e => e.stopPropagation()}>
                 {WIDGETS.map(widget => (
-                    <button key={widget.type} onClick={() => onSelect(widget.type)} className="flex flex-col items-center justify-center bg-gray-700 p-4 rounded-md text-white hover:bg-primary-600 transition-colors">
+                    <button key={widget.type} onClick={() => onSelect(widget.type)} className="flex flex-col items-center justify-center bg-gray-50 p-4 rounded-md text-gray-700 hover:bg-primary-600 hover:text-white transition-colors border border-gray-200">
                         {widget.icon}
                         <span className="mt-2 text-sm">{widget.name}</span>
                     </button>
@@ -219,15 +219,15 @@ const PageEditor: React.FC<{ initialData?: Page; onSave: (pageData: NewPage) => 
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <input type="text" placeholder="Page Title" value={title} onChange={handleTitleChange} required className="md:col-span-1 w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 text-white" />
-                <input type="text" placeholder="url-slug" value={slug} onChange={e => setSlug(e.target.value)} required className="md:col-span-1 w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 text-white font-mono text-sm" />
-                <select value={status} onChange={e => setStatus(e.target.value as 'draft' | 'published')} className="md:col-span-1 w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 text-white">
+                <input type="text" placeholder="Page Title" value={title} onChange={handleTitleChange} required className="md:col-span-1 w-full bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-900" />
+                <input type="text" placeholder="url-slug" value={slug} onChange={e => setSlug(e.target.value)} required className="md:col-span-1 w-full bg-gray-100 border border-gray-300 rounded-md px-3 py-2 text-gray-900 font-mono text-sm" />
+                <select value={status} onChange={e => setStatus(e.target.value as 'draft' | 'published')} className="md:col-span-1 w-full bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-900">
                     <option value="draft">Draft</option>
                     <option value="published">Published</option>
                 </select>
             </div>
             
-            <div className="flex h-[75vh] border border-gray-600 rounded-lg overflow-hidden bg-gray-900">
+            <div className="flex h-[75vh] border border-gray-200 rounded-lg overflow-hidden bg-gray-50 shadow-inner">
                 <div className="flex-1 bg-white relative overflow-y-auto p-4 space-y-2">
                     {elements.map(el => (
                        <CanvasElement key={el.id} element={el} isSelected={selectedElementId === el.id} onSelect={setSelectedElementId} onDelete={deleteElement} onDuplicate={duplicateElement} />

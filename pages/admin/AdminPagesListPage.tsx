@@ -46,16 +46,16 @@ const AdminPagesListPage = () => {
   }
 
   return (
-    <div className="bg-gray-800 shadow-lg rounded-lg p-6">
+    <div className="bg-white shadow-md rounded-lg p-6">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-100">Manage Pages</h2>
+        <h2 className="text-2xl font-bold text-gray-900">Manage Pages</h2>
         <Link to="/admin/pages/new">
             <Button>Add New Page</Button>
         </Link>
       </div>
       <div className="overflow-x-auto">
-        <table className="w-full text-sm text-left text-gray-400">
-          <thead className="text-xs text-gray-300 uppercase bg-gray-700">
+        <table className="w-full text-sm text-left text-gray-500">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
               <th scope="col" className="px-6 py-3">Title</th>
               <th scope="col" className="px-6 py-3">Slug</th>
@@ -66,23 +66,23 @@ const AdminPagesListPage = () => {
           </thead>
           <tbody>
             {pages.map(page => (
-              <tr key={page.id} className="bg-gray-800 border-b border-gray-700 hover:bg-gray-600">
-                <td className="px-6 py-4 font-medium text-white whitespace-nowrap">{page.title}</td>
+              <tr key={page.id} className="bg-white border-b hover:bg-gray-50">
+                <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{page.title}</td>
                 <td className="px-6 py-4 font-mono text-xs">/pages/{page.slug}</td>
                 <td className="px-6 py-4">
-                  <span className={`px-2 py-1 text-xs font-semibold rounded-full capitalize ${page.status === 'published' ? 'bg-green-500 text-green-900' : 'bg-yellow-500 text-yellow-900'}`}>
+                  <span className={`px-2 py-1 text-xs font-semibold rounded-full capitalize ${page.status === 'published' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
                     {page.status}
                   </span>
                 </td>
                 <td className="px-6 py-4">{new Date(page.updatedAt).toLocaleDateString()}</td>
                 <td className="px-6 py-4 flex items-center space-x-2">
                     <a href={`/#/pages/${page.slug}`} target="_blank" rel="noopener noreferrer">
-                        <Button variant="secondary" className="!px-3 !py-1 bg-blue-600 hover:bg-blue-700 text-white">View</Button>
+                        <Button variant="secondary" className="!px-3 !py-1 bg-blue-100 text-blue-700 hover:bg-blue-200">View</Button>
                     </a>
                     <Link to={`/admin/pages/edit/${page.id}`}>
                         <Button variant="secondary" className="!px-3 !py-1">Edit</Button>
                     </Link>
-                    <Button variant="secondary" className="!px-3 !py-1 bg-red-600 hover:bg-red-700 text-white" onClick={() => handleDelete(page.id)}>Delete</Button>
+                    <Button variant="secondary" className="!px-3 !py-1 bg-red-100 text-red-700 hover:bg-red-200" onClick={() => handleDelete(page.id)}>Delete</Button>
                 </td>
               </tr>
             ))}

@@ -30,7 +30,7 @@ const CartPage = () => {
       <div className="mt-6">
         <div className="flex justify-between items-center text-lg font-medium text-gray-700">
           <span>Subtotal ({totalItems} items)</span>
-          <span className="font-bold text-xl text-gray-900">${totalPrice.toFixed(2)}</span>
+          <span className="font-bold text-xl text-gray-900">₹{totalPrice.toFixed(2)}</span>
         </div>
         <p className="text-sm text-gray-500 mt-2">Shipping and taxes calculated at checkout.</p>
         <div className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4">

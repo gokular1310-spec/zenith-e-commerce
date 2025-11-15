@@ -76,21 +76,21 @@ const AdminAISettingsPage = () => {
   }
 
   return (
-    <div className="bg-gray-800 shadow-lg rounded-lg p-6 text-gray-300 space-y-8">
+    <div className="bg-white shadow-md rounded-lg p-6 text-gray-700 space-y-8">
       <div>
-        <h2 className="text-2xl font-bold text-gray-100 mb-2">AI Assistant Settings</h2>
-        <p className="text-gray-400">Manage the topics and questions your AI support assistant is allowed to answer. Enabled topics will be used by the AI to determine if it can respond to a customer's query.</p>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">AI Assistant Settings</h2>
+        <p className="text-gray-500">Manage the topics and questions your AI support assistant is allowed to answer. Enabled topics will be used by the AI to determine if it can respond to a customer's query.</p>
       </div>
 
       {/* Add New Topic Form */}
-      <div className="bg-gray-700 p-4 rounded-lg">
+      <div className="bg-gray-50 p-4 rounded-lg border">
         <form onSubmit={handleAddTopic} className="flex items-center gap-4">
             <input 
                 type="text"
                 value={newTopic}
                 onChange={(e) => setNewTopic(e.target.value)}
                 placeholder="Enter a new topic (e.g., Warranty Information)"
-                className="flex-grow bg-gray-800 border border-gray-600 rounded-md px-3 py-2 focus:ring-primary-500 focus:border-primary-500 text-white"
+                className="flex-grow bg-white border border-gray-300 rounded-md px-3 py-2 focus:ring-primary-500 focus:border-primary-500 text-gray-900"
             />
             <Button type="submit" disabled={isSubmitting || !newTopic.trim()}>
                 {isSubmitting ? "Adding..." : "Add Topic"}
@@ -100,8 +100,8 @@ const AdminAISettingsPage = () => {
 
       {/* Topics List */}
       <div className="overflow-x-auto">
-        <table className="w-full text-sm text-left text-gray-400">
-          <thead className="text-xs text-gray-300 uppercase bg-gray-700">
+        <table className="w-full text-sm text-left text-gray-500">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
               <th scope="col" className="px-6 py-3">Topic</th>
               <th scope="col" className="px-6 py-3 text-center">Status</th>
@@ -110,18 +110,18 @@ const AdminAISettingsPage = () => {
           </thead>
           <tbody>
             {topics.map(topic => (
-              <tr key={topic.id} className="bg-gray-800 border-b border-gray-700 hover:bg-gray-600">
-                <td className="px-6 py-4 font-medium text-white whitespace-nowrap">{topic.topic}</td>
+              <tr key={topic.id} className="bg-white border-b hover:bg-gray-50">
+                <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{topic.topic}</td>
                 <td className="px-6 py-4 text-center">
-                  <span className={`px-2 py-1 text-xs font-semibold rounded-full ${topic.enabled ? 'bg-green-500 text-green-900' : 'bg-gray-500 text-gray-900'}`}>
+                  <span className={`px-2 py-1 text-xs font-semibold rounded-full ${topic.enabled ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
                     {topic.enabled ? 'Enabled' : 'Disabled'}
                   </span>
                 </td>
                 <td className="px-6 py-4 flex items-center justify-end space-x-2">
-                  <Button variant="secondary" className={`!px-3 !py-1 ${topic.enabled ? 'bg-yellow-600 hover:bg-yellow-700 text-white' : 'bg-green-600 hover:bg-green-700 text-white'}`} onClick={() => handleToggleEnabled(topic)}>
+                  <Button variant="secondary" className={`!px-3 !py-1 ${topic.enabled ? 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200' : 'bg-green-100 text-green-800 hover:bg-green-200'}`} onClick={() => handleToggleEnabled(topic)}>
                     {topic.enabled ? 'Disable' : 'Enable'}
                   </Button>
-                  <Button variant="secondary" className="!px-3 !py-1 bg-red-600 hover:bg-red-700 text-white" onClick={() => handleDelete(topic.id)}>Delete</Button>
+                  <Button variant="secondary" className="!px-3 !py-1 bg-red-100 text-red-700 hover:bg-red-200" onClick={() => handleDelete(topic.id)}>Delete</Button>
                 </td>
               </tr>
             ))}

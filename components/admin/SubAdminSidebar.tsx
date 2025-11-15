@@ -12,14 +12,14 @@ const LogoutIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-6 
 const SubAdminSidebar = () => {
     const { logout } = useAuth();
     
-    const activeClassName = "bg-gray-700 text-white";
-    const inactiveClassName = "text-gray-300 hover:bg-gray-700 hover:text-white";
-    const baseClassName = "flex items-center px-4 py-3 rounded-md text-sm font-medium transition-colors";
+    const activeClassName = "bg-primary-50 text-primary-600 border-l-4 border-primary-500";
+    const inactiveClassName = "text-gray-600 hover:bg-gray-100 hover:text-gray-900 border-l-4 border-transparent";
+    const baseClassName = "flex items-center px-4 py-3 text-sm font-medium transition-colors group";
 
     return (
-        <div className="flex flex-col w-64 bg-gray-800">
-            <div className="flex items-center justify-center h-16 bg-gray-900">
-                <span className="text-white text-xl font-bold">Zenith Vendor</span>
+        <div className="flex flex-col w-64 bg-white border-r border-gray-200">
+            <div className="flex items-center justify-center h-16 border-b border-gray-200">
+                <span className="text-primary-600 text-xl font-bold">Zenith Vendor</span>
             </div>
             <div className="flex flex-col flex-1 overflow-y-auto">
                 <nav className="flex-1 px-2 py-4 space-y-2">
@@ -44,7 +44,7 @@ const SubAdminSidebar = () => {
                         <span className="ml-3">Messages</span>
                     </NavLink>
                 </nav>
-                <div className="px-2 py-4">
+                <div className="px-2 py-4 mt-auto">
                      <button onClick={logout} className={`${baseClassName} ${inactiveClassName} w-full`}>
                         <LogoutIcon />
                         <span className="ml-3">Logout</span>

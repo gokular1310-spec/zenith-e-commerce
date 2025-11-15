@@ -74,7 +74,7 @@ const PaymentPage = () => {
         <div className="border-t pt-4">
             <div className="flex justify-between items-center text-2xl font-bold text-gray-900">
                 <span>Order Total</span>
-                <span>${totalPrice.toFixed(2)}</span>
+                <span>₹{totalPrice.toFixed(2)}</span>
             </div>
         </div>
         
@@ -85,7 +85,7 @@ const PaymentPage = () => {
           disabled={isProcessing}
           className="w-full text-lg"
         >
-          {isProcessing ? <><Spinner /> Processing...</> : `Pay $${totalPrice.toFixed(2)}`}
+          {isProcessing ? <><Spinner /> Processing...</> : `Pay ₹${totalPrice.toFixed(2)}`}
         </Button>
       </div>
     </div>

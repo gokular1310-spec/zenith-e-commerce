@@ -21,8 +21,8 @@ const AdminAddPage = () => {
     };
 
     return (
-        <div className="bg-gray-800 shadow-lg rounded-lg p-6">
-            <h2 className="text-2xl font-bold text-gray-100 mb-6">Create New Page</h2>
+        <div className="bg-white shadow-md rounded-lg p-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Create New Page</h2>
             <PageEditor onSave={handleSave} isSaving={isSaving} />
         </div>
     );

@@ -13,6 +13,7 @@ const ResetPasswordPage = () => {
   const [loading, setLoading] = useState(false);
 
   if (!token) {
+    // This case should be handled gracefully, but for now we'll keep the simple text.
     return (
       <div className="text-center p-8">
         <p className="text-red-500">No reset token provided. Please request a new link.</p>
@@ -39,7 +40,7 @@ const ResetPasswordPage = () => {
     try {
       const response = await api.resetPassword(token, newPassword);
       if (response.success) {
-        setMessage('Your password has been reset successfully! You can now log in.');
+        setMessage('Your password has been reset successfully! Redirecting to login...');
         setTimeout(() => navigate('/login'), 3000);
       } else {
         setError(response.message || 'Failed to reset password. The link may be invalid or expired.');
@@ -52,20 +53,30 @@ const ResetPasswordPage = () => {
   };
 
   return (
-    <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-xl shadow-lg">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Create a new password
-          </h2>
+    <div className="relative min-h-screen w-full bg-gray-100 dark:bg-gray-900 flex items-center justify-center p-4 overflow-hidden">
+      {/* Background Shapes */}
+      <div className="absolute top-0 -left-1/4 w-96 h-96 bg-purple-500/30 dark:bg-purple-500/20 rounded-full filter blur-3xl animate-float-4"></div>
+      <div className="absolute bottom-0 -right-1/4 w-96 h-96 bg-teal-500/30 dark:bg-teal-500/20 rounded-full filter blur-3xl animate-float-5"></div>
+      
+      {/* Glassmorphism Card */}
+      <div className="w-full max-w-md bg-white/60 dark:bg-gray-800/60 backdrop-blur-lg rounded-2xl shadow-2xl border border-white/20 dark:border-gray-700/50 p-8 z-10">
+        <div className="text-center mb-8">
+            <div className="flex items-center justify-center space-x-2 mb-4">
+              <svg className="h-8 w-auto text-primary-600 dark:text-primary-400" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5-10-5-10 5z"/>
+              </svg>
+              <span className="text-3xl font-bold text-gray-800 dark:text-white">Zenith</span>
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Create New Password</h2>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          {message && <p className="text-green-600 text-sm text-center bg-green-50 p-3 rounded-md">{message}</p>}
-          {error && <p className="text-red-500 text-sm text-center bg-red-50 p-3 rounded-md">{error}</p>}
+
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          {message && <p className="text-green-800 dark:text-green-300 text-sm text-center bg-green-100 dark:bg-green-900/50 p-3 rounded-md">{message}</p>}
+          {error && <p className="text-red-500 text-sm text-center bg-red-100 dark:bg-red-900/50 p-3 rounded-md">{error}</p>}
           
           {!message && (
             <>
-              <div className="rounded-md shadow-sm -space-y-px">
+              <div className="space-y-4">
                 <div>
                   <label htmlFor="new-password" className="sr-only">New Password</label>
                   <input
@@ -73,7 +84,7 @@ const ResetPasswordPage = () => {
                     name="newPassword"
                     type="password"
                     required
-                    className="appearance-none rounded-t-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                    className="appearance-none relative block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-gray-50/50 dark:bg-gray-700/50 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm transition-colors"
                     placeholder="New password (min. 8 characters)"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
@@ -86,7 +97,7 @@ const ResetPasswordPage = () => {
                     name="confirmPassword"
                     type="password"
                     required
-                    className="appearance-none rounded-b-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                    className="appearance-none relative block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-gray-50/50 dark:bg-gray-700/50 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm transition-colors"
                     placeholder="Confirm new password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
@@ -95,7 +106,7 @@ const ResetPasswordPage = () => {
               </div>
 
               <div>
-                <Button type="submit" className="w-full" disabled={loading}>
+                <Button type="submit" className="w-full py-3 text-base" disabled={loading}>
                   {loading ? 'Resetting...' : 'Reset Password'}
                 </Button>
               </div>
@@ -103,8 +114,8 @@ const ResetPasswordPage = () => {
           )}
         </form>
          {message && (
-             <div className="text-sm text-center">
-                <Link to="/login" className="font-medium text-primary-600 hover:text-primary-500">
+             <div className="text-sm text-center mt-6">
+                <Link to="/login" className="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300">
                     Proceed to Login
                 </Link>
             </div>

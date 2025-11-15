@@ -35,23 +35,23 @@ const AdminAddUserPage = () => {
     };
 
     return (
-        <div className="bg-gray-800 shadow-lg rounded-lg p-6 max-w-2xl mx-auto">
-            <h2 className="text-2xl font-bold text-gray-100 mb-6">Create New User</h2>
+        <div className="bg-white shadow-md rounded-lg p-6 max-w-2xl mx-auto">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Create New User</h2>
             <form onSubmit={handleSubmit} className="space-y-6">
-                {error && <p className="text-red-400 text-sm text-center bg-red-900/50 p-3 rounded-md">{error}</p>}
+                {error && <p className="text-red-600 text-sm text-center bg-red-100 p-3 rounded-md">{error}</p>}
                 <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">Email Address</label>
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
                     <input
                         type="email"
                         id="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
-                        className="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 focus:ring-primary-500 focus:border-primary-500 text-white"
+                        className="w-full bg-gray-50 border border-gray-300 rounded-md px-3 py-2 focus:ring-primary-500 focus:border-primary-500 text-gray-900"
                     />
                 </div>
                 <div>
-                    <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-1">Password</label>
+                    <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">Password</label>
                     <input
                         type="password"
                         id="password"
@@ -59,16 +59,16 @@ const AdminAddUserPage = () => {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                         placeholder="Min. 8 characters"
-                        className="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 focus:ring-primary-500 focus:border-primary-500 text-white"
+                        className="w-full bg-gray-50 border border-gray-300 rounded-md px-3 py-2 focus:ring-primary-500 focus:border-primary-500 text-gray-900"
                     />
                 </div>
                 <div>
-                    <label htmlFor="role" className="block text-sm font-medium text-gray-300 mb-1">Role</label>
+                    <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-1">Role</label>
                     <select
                         id="role"
                         value={role}
                         onChange={(e) => setRole(e.target.value as 'customer' | 'admin' | 'sub-admin')}
-                        className="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 focus:ring-primary-500 focus:border-primary-500 text-white"
+                        className="w-full bg-gray-50 border border-gray-300 rounded-md px-3 py-2 focus:ring-primary-500 focus:border-primary-500 text-gray-900"
                     >
                         <option value="customer">Customer</option>
                         <option value="admin">Admin</option>

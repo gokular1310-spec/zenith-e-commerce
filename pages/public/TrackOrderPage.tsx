@@ -84,14 +84,14 @@ const TrackOrderPage = () => {
                         <div key={item.productId} className="p-4 flex justify-between items-center">
                             <div>
                                 <p className="font-medium text-gray-800">{item.productName}</p>
-                                <p className="text-sm text-gray-500">Qty: {item.quantity} @ ${item.price.toFixed(2)}</p>
+                                <p className="text-sm text-gray-500">Qty: {item.quantity} @ ₹{item.price.toFixed(2)}</p>
                             </div>
-                            <p className="font-semibold text-gray-900">${(item.quantity * item.price).toFixed(2)}</p>
+                            <p className="font-semibold text-gray-900">₹{(item.quantity * item.price).toFixed(2)}</p>
                         </div>
                     ))}
                     <div className="p-4 flex justify-between items-center bg-gray-50">
                         <p className="text-lg font-bold text-gray-900">Total</p>
-                        <p className="text-lg font-bold text-gray-900">${order.total.toFixed(2)}</p>
+                        <p className="text-lg font-bold text-gray-900">₹{order.total.toFixed(2)}</p>
                     </div>
                 </div>
             </div>

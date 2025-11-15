@@ -42,31 +42,31 @@ const AdminSearchResultsPage = () => {
     }
 
     if (!query) {
-        return <div className="text-gray-400 text-center">Please enter a search term in the header.</div>;
+        return <div className="text-gray-500 text-center">Please enter a search term in the header.</div>;
     }
     
     const totalResults = (results?.products.length || 0) + (results?.orders.length || 0) + (results?.users.length || 0);
 
     return (
         <div>
-            <h2 className="text-3xl font-bold text-gray-100 mb-6">Search Results for "{query}"</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">Search Results for "{query}"</h2>
             
             {totalResults === 0 ? (
-                <div className="text-gray-400 text-center bg-gray-800 p-8 rounded-lg">No results found.</div>
+                <div className="text-gray-500 text-center bg-white p-8 rounded-lg shadow-md">No results found.</div>
             ) : (
                 <div className="space-y-8">
                     {/* Products */}
                     {results?.products && results.products.length > 0 && (
-                        <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
-                            <h3 className="text-xl font-bold text-white mb-4">Products ({results.products.length})</h3>
-                            <ul className="divide-y divide-gray-700">
+                        <div className="bg-white p-6 rounded-lg shadow-md">
+                            <h3 className="text-xl font-bold text-gray-800 mb-4">Products ({results.products.length})</h3>
+                            <ul className="divide-y divide-gray-200">
                                 {results.products.map(product => (
                                     <li key={product.id} className="py-3">
-                                        <Link to={`${basePath}/products/edit/${product.id}`} className="flex items-center gap-4 hover:bg-gray-700 p-2 rounded-md transition-colors">
+                                        <Link to={`${basePath}/products/edit/${product.id}`} className="flex items-center gap-4 hover:bg-gray-50 p-2 rounded-md transition-colors">
                                             <img src={product.imageUrls[0]} alt={product.name} className="w-12 h-12 object-cover rounded-md" />
                                             <div>
-                                                <p className="font-semibold text-white">{product.name}</p>
-                                                <p className="text-sm text-gray-400">ID: {product.id} | Stock: {product.stock}</p>
+                                                <p className="font-semibold text-gray-800">{product.name}</p>
+                                                <p className="text-sm text-gray-500">ID: {product.id} | Stock: {product.stock}</p>
                                             </div>
                                         </Link>
                                     </li>
@@ -77,14 +77,14 @@ const AdminSearchResultsPage = () => {
 
                     {/* Orders */}
                     {results?.orders && results.orders.length > 0 && (
-                        <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
-                            <h3 className="text-xl font-bold text-white mb-4">Orders ({results.orders.length})</h3>
-                             <ul className="divide-y divide-gray-700">
+                        <div className="bg-white p-6 rounded-lg shadow-md">
+                            <h3 className="text-xl font-bold text-gray-800 mb-4">Orders ({results.orders.length})</h3>
+                             <ul className="divide-y divide-gray-200">
                                 {results.orders.map(order => (
                                     <li key={order.id} className="py-3">
-                                        <Link to={`${basePath}/orders/${order.id}`} className="block hover:bg-gray-700 p-2 rounded-md transition-colors">
-                                            <p className="font-semibold text-white">Order ID: {order.id}</p>
-                                            <p className="text-sm text-gray-400">{order.customerEmail} | Total: ${order.total.toFixed(2)}</p>
+                                        <Link to={`${basePath}/orders/${order.id}`} className="block hover:bg-gray-50 p-2 rounded-md transition-colors">
+                                            <p className="font-semibold text-gray-800">Order ID: {order.id}</p>
+                                            <p className="text-sm text-gray-500">{order.customerEmail} | Total: ${order.total.toFixed(2)}</p>
                                         </Link>
                                     </li>
                                 ))}
@@ -94,14 +94,14 @@ const AdminSearchResultsPage = () => {
                     
                     {/* Users (Admin only) */}
                     {user?.role === 'admin' && results?.users && results.users.length > 0 && (
-                         <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
-                            <h3 className="text-xl font-bold text-white mb-4">Users ({results.users.length})</h3>
-                             <ul className="divide-y divide-gray-700">
+                         <div className="bg-white p-6 rounded-lg shadow-md">
+                            <h3 className="text-xl font-bold text-gray-800 mb-4">Users ({results.users.length})</h3>
+                             <ul className="divide-y divide-gray-200">
                                 {results.users.map(u => (
                                     <li key={u.id} className="py-3">
-                                       <div className="hover:bg-gray-700 p-2 rounded-md transition-colors">
-                                            <p className="font-semibold text-white">{u.email}</p>
-                                            <p className="text-sm text-gray-400 capitalize">Role: {u.role} | Status: {u.status}</p>
+                                       <div className="hover:bg-gray-50 p-2 rounded-md transition-colors">
+                                            <p className="font-semibold text-gray-800">{u.email}</p>
+                                            <p className="text-sm text-gray-500 capitalize">Role: {u.role} | Status: {u.status}</p>
                                        </div>
                                     </li>
                                 ))}

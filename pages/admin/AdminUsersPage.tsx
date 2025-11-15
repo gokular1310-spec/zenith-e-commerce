@@ -93,11 +93,11 @@ const AdminUsersPage = () => {
 
   return (
     <>
-      <div className="bg-gray-800 shadow-lg rounded-lg p-6">
-        <h2 className="text-2xl font-bold text-gray-100 mb-4">User Management</h2>
+      <div className="bg-white shadow-md rounded-lg p-6">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">User Management</h2>
         <div className="overflow-x-auto">
-          <table className="w-full text-sm text-left text-gray-400">
-            <thead className="text-xs text-gray-300 uppercase bg-gray-700">
+          <table className="w-full text-sm text-left text-gray-500">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
               <tr>
                 <th scope="col" className="px-6 py-3">Email</th>
                 <th scope="col" className="px-6 py-3">Role</th>
@@ -107,20 +107,20 @@ const AdminUsersPage = () => {
             </thead>
             <tbody>
               {users.map(user => (
-                <tr key={user.id} className="bg-gray-800 border-b border-gray-700 hover:bg-gray-600">
-                  <td className="px-6 py-4 font-medium text-white whitespace-nowrap">{user.email}</td>
+                <tr key={user.id} className="bg-white border-b hover:bg-gray-50">
+                  <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{user.email}</td>
                   <td className="px-6 py-4 capitalize">{user.role}</td>
                   <td className="px-6 py-4">
-                    <span className={`px-2 py-1 text-xs font-semibold rounded-full ${user.status === 'active' ? 'bg-green-500 text-green-900' : 'bg-red-500 text-red-900'}`}>
+                    <span className={`px-2 py-1 text-xs font-semibold rounded-full ${user.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
                       {user.status}
                     </span>
                   </td>
                   <td className="px-6 py-4 flex items-center space-x-2">
                     <Button variant="secondary" className="!px-2 !py-1" onClick={() => openEditModal(user)}>Edit</Button>
-                    <Button variant="secondary" className={`!px-2 !py-1 ${user.status === 'active' ? 'bg-yellow-600 hover:bg-yellow-700 text-white' : 'bg-green-600 hover:bg-green-700 text-white'}`} onClick={() => handleToggleBlock(user)}>
+                    <Button variant="secondary" className={`!px-2 !py-1 ${user.status === 'active' ? 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200' : 'bg-green-100 text-green-800 hover:bg-green-200'}`} onClick={() => handleToggleBlock(user)}>
                         {user.status === 'active' ? 'Block' : 'Unblock'}
                     </Button>
-                    <Button variant="secondary" className="!px-2 !py-1 bg-red-600 hover:bg-red-700 text-white" onClick={() => handleDelete(user.id)}>Delete</Button>
+                    <Button variant="secondary" className="!px-2 !py-1 bg-red-100 text-red-700 hover:bg-red-200" onClick={() => handleDelete(user.id)}>Delete</Button>
                   </td>
                 </tr>
               ))}

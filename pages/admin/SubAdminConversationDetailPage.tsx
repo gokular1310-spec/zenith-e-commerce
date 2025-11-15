@@ -63,22 +63,22 @@ const SubAdminConversationDetailPage = () => {
   }
 
   if (!conversation) {
-    return <div className="text-center text-xl text-gray-400">Conversation not found.</div>;
+    return <div className="text-center text-xl text-gray-500">Conversation not found.</div>;
   }
 
   return (
-    <div className="bg-gray-800 shadow-lg rounded-lg p-6">
-      <div className="mb-6 border-b border-gray-700 pb-4">
-        <h1 className="text-2xl font-bold text-white">{conversation.subject}</h1>
-        <p className="text-sm text-gray-400">
-          Conversation with <span className="font-medium text-primary-400">{conversation.customerEmail}</span>
+    <div className="bg-white shadow-md rounded-lg p-6">
+      <div className="mb-6 border-b border-gray-200 pb-4">
+        <h1 className="text-2xl font-bold text-gray-900">{conversation.subject}</h1>
+        <p className="text-sm text-gray-500">
+          Conversation with <span className="font-medium text-primary-600">{conversation.customerEmail}</span>
         </p>
       </div>
 
-      <div className="space-y-4 h-96 overflow-y-auto pr-4 mb-4 bg-gray-900 p-4 rounded-lg">
+      <div className="space-y-4 h-96 overflow-y-auto pr-4 mb-4 bg-gray-50 p-4 rounded-lg border border-gray-200">
         {conversation.messages.map((message: Message, index: number) => (
           <div key={index} className={`flex items-end gap-2 ${message.author === 'admin' ? 'justify-end' : 'justify-start'}`}>
-            <div className={`rounded-lg px-4 py-2 max-w-lg ${message.author === 'admin' ? 'bg-primary-700 text-white' : 'bg-gray-600 text-gray-200'}`}>
+            <div className={`rounded-lg px-4 py-2 max-w-lg ${message.author === 'admin' ? 'bg-primary-600 text-white' : 'bg-gray-200 text-gray-800'}`}>
               <p className="text-sm whitespace-pre-wrap">{message.text}</p>
               <p className={`text-xs mt-1 opacity-75 ${message.author === 'admin' ? 'text-right' : 'text-left'}`}>{new Date(message.timestamp).toLocaleString()}</p>
             </div>
@@ -92,12 +92,12 @@ const SubAdminConversationDetailPage = () => {
           value={replyText}
           onChange={(e) => setReplyText(e.target.value)}
           placeholder="Type your reply as an admin..."
-          className="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 focus:ring-primary-500 focus:border-primary-500 text-white"
+          className="w-full bg-white border border-gray-300 rounded-md px-3 py-2 focus:ring-primary-500 focus:border-primary-500 text-gray-900"
           rows={4}
           disabled={isSending}
         />
         <div className="mt-4 flex justify-between items-center">
-            <Link to="/sub-admin/messages" className="font-medium text-primary-400 hover:text-primary-300 text-sm">
+            <Link to="/sub-admin/messages" className="font-medium text-primary-600 hover:text-primary-500 text-sm">
                 &larr; Back to all conversations
             </Link>
             <Button type="submit" disabled={isSending || !replyText.trim()}>

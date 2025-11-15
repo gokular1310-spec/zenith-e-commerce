@@ -138,9 +138,9 @@ const ProductDetailPage = () => {
             <h2 className="text-sm font-semibold text-primary-600 uppercase tracking-wide">{product.category}</h2>
             <h1 className="text-4xl font-extrabold text-gray-900 mt-2">{product.name}</h1>
             <div className="flex items-baseline gap-4 mt-4">
-                <p className="text-3xl text-gray-800">${product.price.toFixed(2)}</p>
+                <p className="text-3xl text-gray-800">₹{product.price.toFixed(2)}</p>
                 {isOnSale && (
-                    <p className="text-2xl text-gray-500 line-through">${product.originalPrice?.toFixed(2)}</p>
+                    <p className="text-2xl text-gray-500 line-through">₹{product.originalPrice?.toFixed(2)}</p>
                 )}
             </div>
             <p className="mt-6 text-gray-600 leading-relaxed">{product.description}</p>

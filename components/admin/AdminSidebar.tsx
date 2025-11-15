@@ -29,16 +29,16 @@ const AdminSidebar = () => {
         setIsSettingsMenuOpen(location.pathname.startsWith('/admin/settings'));
     }, [location.pathname]);
 
-    const activeClassName = "bg-gray-700 text-white";
-    const inactiveClassName = "text-gray-300 hover:bg-gray-700 hover:text-white";
-    const baseClassName = "flex items-center px-4 py-3 rounded-md text-sm font-medium transition-colors";
-    const subMenuBaseClassName = "flex items-center pl-11 pr-4 py-2 rounded-md text-sm font-medium transition-colors";
+    const activeClassName = "bg-primary-50 text-primary-600 border-l-4 border-primary-500";
+    const inactiveClassName = "text-gray-600 hover:bg-gray-100 hover:text-gray-900 border-l-4 border-transparent";
+    const baseClassName = "flex items-center px-4 py-3 text-sm font-medium transition-colors group";
+    const subMenuBaseClassName = "flex items-center pl-11 pr-4 py-2 text-sm font-medium transition-colors group";
 
 
     return (
-        <div className="flex flex-col w-64 bg-gray-800">
-            <div className="flex items-center justify-center h-16 bg-gray-900">
-                <span className="text-white text-2xl font-bold">Zenith Admin</span>
+        <div className="flex flex-col w-64 bg-white border-r border-gray-200">
+            <div className="flex items-center justify-center h-16 border-b border-gray-200">
+                <span className="text-primary-600 text-2xl font-bold">Zenith Admin</span>
             </div>
             <div className="flex flex-col flex-1 overflow-y-auto">
                 <nav className="flex-1 px-2 py-4 space-y-2">
@@ -53,7 +53,7 @@ const AdminSidebar = () => {
 
                     {/* Products Dropdown Menu */}
                     <div>
-                        <button onClick={() => setIsProductsMenuOpen(!isProductsMenuOpen)} className={`${baseClassName} w-full justify-between ${inactiveClassName}`}>
+                        <button onClick={() => setIsProductsMenuOpen(!isProductsMenuOpen)} className={`${baseClassName} w-full justify-between ${isProductsMenuOpen ? 'text-gray-900' : 'text-gray-600'}`}>
                             <div className="flex items-center">
                                 <ProductsIcon />
                                 <span className="ml-3">Products</span>
@@ -74,7 +74,7 @@ const AdminSidebar = () => {
 
                     {/* Pages Dropdown Menu */}
                     <div>
-                        <button onClick={() => setIsPagesMenuOpen(!isPagesMenuOpen)} className={`${baseClassName} w-full justify-between ${inactiveClassName}`}>
+                        <button onClick={() => setIsPagesMenuOpen(!isPagesMenuOpen)} className={`${baseClassName} w-full justify-between ${isPagesMenuOpen ? 'text-gray-900' : 'text-gray-600'}`}>
                             <div className="flex items-center">
                                 <PagesIcon />
                                 <span className="ml-3">Pages</span>
@@ -100,7 +100,7 @@ const AdminSidebar = () => {
                     
                     {/* Users Dropdown Menu */}
                     <div>
-                        <button onClick={() => setIsUserMenuOpen(!isUserMenuOpen)} className={`${baseClassName} w-full justify-between ${inactiveClassName}`}>
+                        <button onClick={() => setIsUserMenuOpen(!isUserMenuOpen)} className={`${baseClassName} w-full justify-between ${isUserMenuOpen ? 'text-gray-900' : 'text-gray-600'}`}>
                             <div className="flex items-center">
                                 <UsersIcon />
                                 <span className="ml-3">Users</span>
@@ -121,7 +121,7 @@ const AdminSidebar = () => {
 
                     {/* Site Settings Dropdown */}
                     <div>
-                        <button onClick={() => setIsSettingsMenuOpen(!isSettingsMenuOpen)} className={`${baseClassName} w-full justify-between ${inactiveClassName}`}>
+                        <button onClick={() => setIsSettingsMenuOpen(!isSettingsMenuOpen)} className={`${baseClassName} w-full justify-between ${isSettingsMenuOpen ? 'text-gray-900' : 'text-gray-600'}`}>
                             <div className="flex items-center">
                                 <SettingsIcon />
                                 <span className="ml-3">Site Settings</span>
@@ -145,7 +145,7 @@ const AdminSidebar = () => {
                         <span className="ml-3">AI Settings</span>
                     </NavLink>
                 </nav>
-                <div className="px-2 py-4">
+                <div className="px-2 py-4 mt-auto">
                      <button onClick={logout} className={`${baseClassName} ${inactiveClassName} w-full`}>
                         <LogoutIcon />
                         <span className="ml-3">Logout</span>

@@ -51,12 +51,12 @@ const AdminEditPage = () => {
     }
 
     return (
-        <div className="bg-gray-800 shadow-lg rounded-lg p-6">
-            <h2 className="text-2xl font-bold text-gray-100 mb-6">Edit Page</h2>
+        <div className="bg-white shadow-md rounded-lg p-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Edit Page</h2>
             {page ? (
                 <PageEditor initialData={page} onSave={handleSave} isSaving={isSaving} />
             ) : (
-                <p className="text-gray-400">Page data could not be loaded.</p>
+                <p className="text-gray-500">Page data could not be loaded.</p>
             )}
         </div>
     );

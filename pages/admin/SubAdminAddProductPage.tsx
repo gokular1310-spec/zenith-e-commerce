@@ -11,8 +11,8 @@ const SubAdminAddProductPage = () => {
     };
 
     return (
-        <div className="bg-gray-800 shadow-lg rounded-lg p-6">
-            <h2 className="text-2xl font-bold text-gray-100 mb-6">Add New Product</h2>
+        <div className="bg-white shadow-md rounded-lg p-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Add New Product</h2>
             <AddProductForm onProductAdded={handleProductAdded} />
         </div>
     );

@@ -57,7 +57,7 @@ const HomePage = () => {
             api.getProducts(),
             api.getBestSellers(),
             api.getSpecialOffers(),
-            api.getProductsUnderPrice(99),
+            api.getProductsUnderPrice(8000),
             api.getInspiredByHistory(),
           ]);
           setAllProducts(allProductsData);
@@ -160,7 +160,7 @@ const HomePage = () => {
       {/* Product Carousels */}
       {bestSellers.length > 0 && <ProductCarousel title="Best Sellers" products={bestSellers} />}
       {specialOffers.length > 0 && <ProductCarousel title="Special Offers" products={specialOffers} />}
-      {under99.length > 0 && <ProductCarousel title="The $99 Store" products={under99} />}
+      {under99.length > 0 && <ProductCarousel title="Under ₹8000" products={under99} />}
       {inspired.length > 0 && <ProductCarousel title="Inspired by Your History" products={inspired} />}
     </div>
   );
