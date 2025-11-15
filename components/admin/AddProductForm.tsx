@@ -9,10 +9,11 @@ interface AddProductFormProps {
     onProductAdded: (product: Product) => void;
 }
 
-const initialFormState: Omit<NewProduct, 'addedBy'> = {
+const initialFormState = {
     name: '',
     description: '',
-    price: 0,
+    originalPrice: 0,
+    offerPrice: '',
     category: '',
     imageUrl: '',
     stock: 0,
@@ -22,7 +23,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ onProductAdded }) => {
     const { user } = useAuth();
     const [formData, setFormData] = useState(initialFormState);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+    const [error, setError] = useState('');
     const [categories, setCategories] = useState<string[]>([]);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
 
@@ -39,10 +40,10 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ onProductAdded }) => {
     }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value, type } = e.target;
+        const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
-            [name]: type === 'number' ? parseFloat(value) || 0 : value
+            [name]: value
         }));
     };
 
@@ -61,20 +62,37 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ onProductAdded }) => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!formData.imageUrl || !user) {
-             setSubmitStatus('error');
-             setTimeout(() => setSubmitStatus('idle'), 3000);
+             setError('Please upload an image.');
              return;
+        }
+
+        const offerPriceNum = parseFloat(formData.offerPrice);
+        const originalPriceNum = Number(formData.originalPrice);
+
+        if (offerPriceNum && offerPriceNum >= originalPriceNum) {
+            setError('Offer price must be less than the original price.');
+            return;
         }
         
         setIsSubmitting(true);
-        setSubmitStatus('idle');
+        setError('');
         try {
-            const finalFormData: NewProduct = { ...formData, addedBy: user.id };
+            const newProductData: Omit<NewProduct, 'addedBy'> = {
+                name: formData.name,
+                description: formData.description,
+                category: formData.category,
+                imageUrl: formData.imageUrl,
+                stock: Number(formData.stock),
+                price: (offerPriceNum > 0) ? offerPriceNum : originalPriceNum,
+                originalPrice: (offerPriceNum > 0) ? originalPriceNum : undefined,
+            };
+
+            const finalFormData: NewProduct = { ...newProductData, addedBy: user.id };
             const newProduct = await api.addProduct(finalFormData);
             onProductAdded(newProduct);
         } catch (error) {
             console.error("Failed to add product:", error);
-            setSubmitStatus('error');
+            setError('Failed to add product.');
         } finally {
             setIsSubmitting(false);
         }
@@ -93,11 +111,17 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ onProductAdded }) => {
                         <label htmlFor="description" className="block text-sm font-medium text-gray-300 mb-1">Description</label>
                         <textarea id="description" name="description" value={formData.description} onChange={handleChange} required rows={6} className="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 focus:ring-primary-500 focus:border-primary-500 text-white"></textarea>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label htmlFor="price" className="block text-sm font-medium text-gray-300 mb-1">Price</label>
-                            <input type="number" id="price" name="price" value={formData.price} onChange={handleChange} required min="0" step="0.01" className="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 focus:ring-primary-500 focus:border-primary-500 text-white" />
+                            <label htmlFor="originalPrice" className="block text-sm font-medium text-gray-300 mb-1">Original Price</label>
+                            <input type="number" id="originalPrice" name="originalPrice" value={formData.originalPrice} onChange={handleChange} required min="0" step="0.01" className="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 focus:ring-primary-500 focus:border-primary-500 text-white" />
                         </div>
+                        <div>
+                            <label htmlFor="offerPrice" className="block text-sm font-medium text-gray-300 mb-1">Offer Price (Optional)</label>
+                            <input type="number" id="offerPrice" name="offerPrice" value={formData.offerPrice} onChange={handleChange} min="0" step="0.01" placeholder="e.g., 89.99" className="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 focus:ring-primary-500 focus:border-primary-500 text-white" />
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label htmlFor="stock" className="block text-sm font-medium text-gray-300 mb-1">Stock Quantity</label>
                             <input type="number" id="stock" name="stock" value={formData.stock} onChange={handleChange} required min="0" className="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 focus:ring-primary-500 focus:border-primary-500 text-white" />
@@ -139,7 +163,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ onProductAdded }) => {
             </div>
             
             <div className="mt-8 flex items-center justify-end">
-                {submitStatus === 'error' && <p className="text-red-400 mr-4">{!formData.imageUrl ? 'Please upload an image.' : 'Failed to add product.'}</p>}
+                {error && <p className="text-red-400 mr-4 text-sm">{error}</p>}
                 <Button type="submit" disabled={isSubmitting}>
                     {isSubmitting ? <><Spinner/> Submitting...</> : 'Add Product'}
                 </Button>

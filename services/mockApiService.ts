@@ -9,8 +9,7 @@ const mockProducts: Product[] = [
     addedBy: '1'
   },
   { 
-    id: 2, name: "Aura Mechanical Keyboard", description: "RGB backlit mechanical keyboard with custom switches.", price: 149.99, category: "Accessories", subCategory: "Keyboards", imageUrl: "https://placehold.co/600x400/1e40af/white?text=Keyboard", stock: 75,
-    offer: "Save 10%",
+    id: 2, name: "Aura Mechanical Keyboard", description: "RGB backlit mechanical keyboard with custom switches.", price: 149.99, originalPrice: 166.66, category: "Accessories", subCategory: "Keyboards", imageUrl: "https://placehold.co/600x400/1e40af/white?text=Keyboard", stock: 75,
     specs: { "Switch Type": "Custom Tactile", "Backlight": "Full RGB", "Layout": "104-Key" },
     reviews: [ { id: 2, author: "jane.s@example.com", rating: 4, comment: "Great keyboard, very clicky.", date: "2023-10-20" } ],
     addedBy: '5'
@@ -85,8 +84,7 @@ const mockProducts: Product[] = [
 
   // Smartphones
   { 
-    id: 10, name: "Pixel Pro Smartphone", description: "The latest smartphone with an amazing camera system.", price: 999.00, category: "Smartphones", imageUrl: "https://placehold.co/600x400/1d4ed8/white?text=Smartphone", stock: 110,
-    offer: "Free Earbuds Included",
+    id: 10, name: "Pixel Pro Smartphone", description: "The latest smartphone with an amazing camera system.", price: 999.00, originalPrice: 1099.00, category: "Smartphones", imageUrl: "https://placehold.co/600x400/1d4ed8/white?text=Smartphone", stock: 110,
     specs: { "Display": "6.7-inch OLED", "Camera": "50MP Main", "Storage": "256GB" },
     reviews: [], addedBy: '1'
   },
@@ -110,8 +108,7 @@ const mockProducts: Product[] = [
 
   // Smart Watches
   {
-      id: 15, name: "Chrono Watch Pro", description: "Elegant smartwatch with advanced health tracking features.", price: 299.99, category: "Smart Watches", imageUrl: "https://placehold.co/600x400/1d4ed8/white?text=Chrono+Watch", stock: 95,
-      offer: "15% Off",
+      id: 15, name: "Chrono Watch Pro", description: "Elegant smartwatch with advanced health tracking features.", price: 299.99, originalPrice: 352.93, category: "Smart Watches", imageUrl: "https://placehold.co/600x400/1d4ed8/white?text=Chrono+Watch", stock: 95,
       specs: { "Display": "1.4-inch AMOLED", "Sensors": "Heart Rate, SpO2, GPS", "Battery": "14 days" },
       reviews: [], addedBy: '1'
   },
@@ -136,8 +133,7 @@ const mockProducts: Product[] = [
       reviews: [], addedBy: '1'
   },
   {
-      id: 18, name: "Tech Fleece Hoodie", description: "Warm and breathable hoodie, perfect for any weather.", price: 89.00, category: "Apparel", subCategory: "Hoodies", imageUrl: "https://placehold.co/600x400/2563eb/white?text=Tech+Hoodie", stock: 180,
-      offer: "Free Shipping",
+      id: 18, name: "Tech Fleece Hoodie", description: "Warm and breathable hoodie, perfect for any weather.", price: 89.00, originalPrice: 99.00, category: "Apparel", subCategory: "Hoodies", imageUrl: "https://placehold.co/600x400/2563eb/white?text=Tech+Hoodie", stock: 180,
       specs: { "Material": "Polyester Blend", "Features": "Zippered Pockets, Water-resistant" },
       reviews: [], addedBy: '5'
   },
@@ -175,7 +171,7 @@ const mockProducts: Product[] = [
   { id: 176, name: "Red Light Therapy Panel", description: "For skin health and muscle recovery.", price: 299.00, category: "Health", imageUrl: "https://picsum.photos/seed/product176/600/400", stock: 60, reviews: [], addedBy: '5' },
 
   // Furniture
-  { id: 7, name: "Atlas Standing Desk", description: "Adjustable height electric standing desk.", price: 599.00, category: "Furniture", imageUrl: "https://picsum.photos/seed/product7/600/400", stock: 30, offer: "$50 Off", reviews: [], addedBy: '5' },
+  { id: 7, name: "Atlas Standing Desk", description: "Adjustable height electric standing desk.", price: 599.00, originalPrice: 649.00, category: "Furniture", imageUrl: "https://picsum.photos/seed/product7/600/400", stock: 30, reviews: [], addedBy: '5' },
   { id: 177, name: "Ergonomic Office Chair", description: "All-day comfort and support.", price: 399.00, category: "Furniture", imageUrl: "https://picsum.photos/seed/product177/600/400", stock: 50, reviews: [], addedBy: '1' },
   { id: 178, name: "Monitor Arm", description: "Free up desk space and get the perfect monitor position.", price: 99.00, category: "Furniture", imageUrl: "https://picsum.photos/seed/product178/600/400", stock: 150, reviews: [], addedBy: '5' },
   { id: 179, name: "Cable Management Box", description: "Keep your cables tidy and out of sight.", price: 25.00, category: "Furniture", imageUrl: "https://picsum.photos/seed/product179/600/400", stock: 300, reviews: [], addedBy: '1' },
@@ -816,7 +812,7 @@ export const api = {
     return simulateDelay([...results]);
   },
   getSpecialOffers: () => {
-    const results = mockProducts.filter(p => p.offer);
+    const results = mockProducts.filter(p => p.originalPrice && p.originalPrice > p.price);
     return simulateDelay([...results]);
   },
   getProductsUnderPrice: (price: number) => {

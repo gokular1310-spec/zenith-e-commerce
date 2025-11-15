@@ -63,6 +63,9 @@ const ProductDetailPage = () => {
   const handleAddToCart = () => {
     addItem(product);
   };
+  
+  const isOnSale = product.originalPrice && product.originalPrice > product.price;
+  const discountPercent = isOnSale ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) : 0;
 
   return (
     <div className="space-y-12">
@@ -71,16 +74,21 @@ const ProductDetailPage = () => {
         <div className="grid md:grid-cols-2 gap-4">
           <div className="p-4 relative">
             <img src={product.imageUrl} alt={product.name} className="w-full h-auto object-cover rounded-lg" />
-            {product.offer && (
+            {isOnSale && (
                 <div className="absolute top-6 left-0 bg-red-500 text-white font-bold py-1 px-4 rounded-r-full shadow-md">
-                    {product.offer}
+                    {discountPercent}% OFF
                 </div>
             )}
           </div>
           <div className="p-8 flex flex-col justify-center">
             <h2 className="text-sm font-semibold text-primary-600 uppercase tracking-wide">{product.category}</h2>
             <h1 className="text-4xl font-extrabold text-gray-900 mt-2">{product.name}</h1>
-            <p className="text-3xl text-gray-800 mt-4">${product.price.toFixed(2)}</p>
+            <div className="flex items-baseline gap-4 mt-4">
+                <p className="text-3xl text-gray-800">${product.price.toFixed(2)}</p>
+                {isOnSale && (
+                    <p className="text-2xl text-gray-500 line-through">${product.originalPrice?.toFixed(2)}</p>
+                )}
+            </div>
             <p className="mt-6 text-gray-600 leading-relaxed">{product.description}</p>
             <div className="mt-8">
               <Button onClick={handleAddToCart} className="w-full sm:w-auto text-lg py-3 px-6">

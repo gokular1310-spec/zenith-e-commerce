@@ -15,7 +15,7 @@ const DealsPage = () => {
       setLoading(true);
       try {
         const data = await api.getProducts();
-        const deals = data.filter(p => p.offer);
+        const deals = data.filter(p => p.originalPrice && p.originalPrice > p.price);
         setDealProducts(deals);
       } catch (error) {
         console.error("Failed to fetch products for deals:", error);

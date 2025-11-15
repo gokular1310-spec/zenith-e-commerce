@@ -14,13 +14,13 @@ export interface Product {
   id: number;
   name: string;
   description: string;
-  price: number;
+  price: number; // The current selling price (could be offer price)
+  originalPrice?: number; // The price before discount. If present and > price, it's a deal.
   category: string;
   subCategory?: string;
   imageUrl: string;
   stock: number;
   specs?: { [key: string]: string };
-  offer?: string;
   reviews?: Review[];
   addedBy: string; // ID of admin or sub-admin
 }
