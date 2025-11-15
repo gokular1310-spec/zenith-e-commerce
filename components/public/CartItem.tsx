@@ -12,7 +12,7 @@ const CartItem: React.FC<CartItemProps> = ({ item }) => {
   return (
     <div className="flex items-center py-5">
       <div className="flex-shrink-0">
-        <img src={item.imageUrl} alt={item.name} className="w-24 h-24 rounded-md object-cover" />
+        <img src={item.imageUrls[0]} alt={item.name} className="w-24 h-24 rounded-md object-cover" />
       </div>
       <div className="ml-4 flex-1 flex flex-col justify-between">
         <div>

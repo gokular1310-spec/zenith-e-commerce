@@ -2,7 +2,7 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
-import AIChatWidget from '../components/public/AIChatWidget';
+import ComparisonTray from '../components/public/ComparisonTray';
 
 const PublicLayout: React.FC = () => {
   return (
@@ -12,7 +12,7 @@ const PublicLayout: React.FC = () => {
         <Outlet />
       </main>
       <Footer />
-      <AIChatWidget />
+      <ComparisonTray />
     </div>
   );
 };

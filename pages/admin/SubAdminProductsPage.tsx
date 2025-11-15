@@ -68,7 +68,7 @@ const SubAdminProductsPage = () => {
             {products.map(product => (
               <tr key={product.id} className="bg-gray-800 border-b border-gray-700 hover:bg-gray-600">
                 <td className="px-6 py-4 font-medium text-white whitespace-nowrap flex items-center">
-                    <img src={product.imageUrl} alt={product.name} className="w-10 h-10 rounded-full mr-4 object-cover" />
+                    <img src={product.imageUrls[0]} alt={product.name} className="w-10 h-10 rounded-full mr-4 object-cover" />
                     {product.name}
                 </td>
                 <td className="px-6 py-4">{product.category}</td>

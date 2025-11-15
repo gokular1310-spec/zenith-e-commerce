@@ -15,7 +15,6 @@ const initialFormState = {
     originalPrice: 0,
     offerPrice: '',
     category: '',
-    imageUrl: '',
     stock: 0,
 };
 
@@ -25,7 +24,8 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ onProductAdded }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
     const [categories, setCategories] = useState<string[]>([]);
-    const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+    const [imageUrlsToSave, setImageUrlsToSave] = useState<string[]>([]);
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -48,21 +48,30 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ onProductAdded }) => {
     };
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
+        const files = e.target.files;
+        if (!files) return;
+
+        // FIX: Explicitly type `file` as `File` to fix the type error on `readAsDataURL`.
+        // Also, use functional `setState` to prevent race conditions when uploading multiple files.
+        Array.from(files).forEach((file: File) => {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setImagePreview(reader.result as string);
-                setFormData(prev => ({ ...prev, imageUrl: 'https://placehold.co/600x400/1e40af/white?text=New+Product' }));
+                setImagePreviews(prev => [...prev, reader.result as string]);
+                setImageUrlsToSave(prev => [...prev, 'https://placehold.co/600x400/1e40af/white?text=New+Img']);
             };
             reader.readAsDataURL(file);
-        }
+        });
+    };
+
+    const handleRemoveImage = (index: number) => {
+        setImagePreviews(prev => prev.filter((_, i) => i !== index));
+        setImageUrlsToSave(prev => prev.filter((_, i) => i !== index));
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!formData.imageUrl || !user) {
-             setError('Please upload an image.');
+        if (imageUrlsToSave.length === 0 || !user) {
+             setError('Please upload at least one image.');
              return;
         }
 
@@ -81,7 +90,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ onProductAdded }) => {
                 name: formData.name,
                 description: formData.description,
                 category: formData.category,
-                imageUrl: formData.imageUrl,
+                imageUrls: imageUrlsToSave,
                 stock: Number(formData.stock),
                 price: (offerPriceNum > 0) ? offerPriceNum : originalPriceNum,
                 originalPrice: (offerPriceNum > 0) ? originalPriceNum : undefined,
@@ -137,26 +146,28 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ onProductAdded }) => {
                 </div>
 
                 {/* Right Column for Image Upload */}
-                <div className="md:col-span-1">
-                     <label className="block text-sm font-medium text-gray-300 mb-1">Product Image</label>
+                <div className="md:col-span-1 space-y-4">
+                     <label className="block text-sm font-medium text-gray-300">Product Images</label>
+                     <div className="grid grid-cols-2 gap-2">
+                        {imagePreviews.map((preview, index) => (
+                            <div key={index} className="relative">
+                                <img src={preview} alt={`Preview ${index}`} className="w-full h-auto object-cover rounded-md aspect-square" />
+                                <button type="button" onClick={() => handleRemoveImage(index)} className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full p-0.5 h-6 w-6 flex items-center justify-center text-xs">&times;</button>
+                            </div>
+                        ))}
+                     </div>
                      <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-600 border-dashed rounded-md">
                         <div className="space-y-1 text-center">
-                            {imagePreview ? (
-                                <img src={imagePreview} alt="Product preview" className="mx-auto h-48 w-auto rounded-md" />
-                            ) : (
-                                <>
-                                 <svg className="mx-auto h-12 w-12 text-gray-500" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                 </svg>
-                                 <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
-                                </>
-                            )}
-                            <div className="flex text-sm text-gray-500 justify-center">
+                             <svg className="mx-auto h-12 w-12 text-gray-500" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                             </svg>
+                             <div className="flex text-sm text-gray-500 justify-center">
                                 <label htmlFor="file-upload" className="relative cursor-pointer bg-gray-700 rounded-md font-medium text-primary-400 hover:text-primary-300 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-offset-gray-800 focus-within:ring-primary-500 px-3 py-1 mt-2">
-                                    <span>{imagePreview ? 'Change image' : 'Upload a file'}</span>
-                                    <input id="file-upload" name="file-upload" type="file" className="sr-only" accept="image/*" onChange={handleImageChange} />
+                                    <span>Upload images</span>
+                                    <input id="file-upload" name="file-upload" type="file" multiple className="sr-only" accept="image/*" onChange={handleImageChange} />
                                 </label>
                             </div>
+                            <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
                         </div>
                      </div>
                 </div>

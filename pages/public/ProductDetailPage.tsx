@@ -7,13 +7,16 @@ import Spinner from '../../components/common/Spinner';
 import Button from '../../components/common/Button';
 import ProductCard from '../../components/public/ProductCard';
 import ProductReviews from '../../components/public/ProductReviews';
+import { useComparison } from '../../hooks/useComparison';
 
 const ProductDetailPage = () => {
   const { productId } = useParams<{ productId: string }>();
   const [product, setProduct] = useState<Product | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string>('');
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const { addItem } = useCart();
+  const { items: comparisonItems, addItem: addCompareItem, removeItem: removeCompareItem, isFull } = useComparison();
 
   useEffect(() => {
     if (!productId) return;
@@ -25,6 +28,9 @@ const ProductDetailPage = () => {
             api.getProducts()
         ]);
         setProduct(productData || null);
+        if (productData?.imageUrls?.length) {
+          setSelectedImage(productData.imageUrls[0]);
+        }
         setAllProducts(allProductsData);
       } catch (error) {
         console.error("Failed to fetch product data:", error);
@@ -67,18 +73,48 @@ const ProductDetailPage = () => {
   const isOnSale = product.originalPrice && product.originalPrice > product.price;
   const discountPercent = isOnSale ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) : 0;
 
+  const isInCompare = comparisonItems.some(item => item.id === product?.id);
+  const canAddToCompare = !isFull || isInCompare;
+
+  const handleCompareToggle = () => {
+      if (!product) return;
+      if (isInCompare) {
+          removeCompareItem(product.id);
+      } else if (canAddToCompare) {
+          addCompareItem(product);
+      }
+  };
+
   return (
     <div className="space-y-12">
       {/* Main Product Section */}
       <div className="bg-white rounded-lg shadow-xl overflow-hidden">
         <div className="grid md:grid-cols-2 gap-4">
-          <div className="p-4 relative">
-            <img src={product.imageUrl} alt={product.name} className="w-full h-auto object-cover rounded-lg" />
-            {isOnSale && (
-                <div className="absolute top-6 left-0 bg-red-500 text-white font-bold py-1 px-4 rounded-r-full shadow-md">
-                    {discountPercent}% OFF
-                </div>
-            )}
+          <div className="p-4">
+            <div className="relative">
+              <img 
+                src={selectedImage} 
+                alt={product.name} 
+                className="w-full h-auto object-cover rounded-lg aspect-square mb-4 shadow-md" 
+              />
+               {isOnSale && (
+                  <div className="absolute top-2 left-2 bg-red-500 text-white font-bold py-1 px-4 rounded-full shadow-md">
+                      {discountPercent}% OFF
+                  </div>
+              )}
+            </div>
+             <div className="flex gap-2 overflow-x-auto pb-2">
+                {product.imageUrls.map((img, index) => (
+                    <button
+                        key={index}
+                        onClick={() => setSelectedImage(img)}
+                        className={`flex-shrink-0 w-20 h-20 rounded-md overflow-hidden border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${selectedImage === img ? 'border-primary-600' : 'border-transparent hover:border-gray-300'}`}
+                        aria-label={`View image ${index + 1}`}
+                    >
+                        <img src={img} alt={`${product.name} thumbnail ${index + 1}`} className="w-full h-full object-cover" />
+                    </button>
+                ))}
+            </div>
           </div>
           <div className="p-8 flex flex-col justify-center">
             <h2 className="text-sm font-semibold text-primary-600 uppercase tracking-wide">{product.category}</h2>
@@ -90,9 +126,18 @@ const ProductDetailPage = () => {
                 )}
             </div>
             <p className="mt-6 text-gray-600 leading-relaxed">{product.description}</p>
-            <div className="mt-8">
-              <Button onClick={handleAddToCart} className="w-full sm:w-auto text-lg py-3 px-6">
+            <div className="mt-8 flex items-center gap-4">
+              <Button onClick={handleAddToCart} className="text-lg py-3 px-6">
                 Add to Cart
+              </Button>
+              <Button 
+                variant="secondary" 
+                onClick={handleCompareToggle} 
+                className="text-lg py-3 px-6" 
+                disabled={!canAddToCompare}
+                title={!canAddToCompare ? 'Comparison is full (max 4 products)' : ''}
+              >
+                {isInCompare ? 'Remove from Compare' : 'Add to Compare'}
               </Button>
             </div>
           </div>

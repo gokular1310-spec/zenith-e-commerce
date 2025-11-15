@@ -18,7 +18,7 @@ export interface Product {
   originalPrice?: number; // The price before discount. If present and > price, it's a deal.
   category: string;
   subCategory?: string;
-  imageUrl: string;
+  imageUrls: string[];
   stock: number;
   specs?: { [key: string]: string };
   reviews?: Review[];
@@ -32,7 +32,8 @@ export interface User {
   email: string;
   password_bcrypt: string;
   role: 'admin' | 'sub-admin' | 'customer';
-  status: 'active' | 'blocked';
+  status: 'active' | 'blocked' | 'pending_verification';
+  verificationToken?: string;
   mobile?: string;
 }
 
@@ -163,4 +164,17 @@ export interface PressRelease {
   title: string;
   date: string;
   excerpt: string;
+}
+
+export interface AdminSearchResults {
+  products: Product[];
+  orders: Order[];
+  users: User[];
+}
+
+export interface SocialMediaLinks {
+  facebook: string;
+  twitter: string;
+  instagram: string;
+  linkedin: string;
 }

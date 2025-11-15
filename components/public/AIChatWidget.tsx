@@ -79,11 +79,14 @@ const AIChatWidget = () => {
                 },
             };
             
+            // FIX: Encapsulated `tools` and `systemInstruction` within a `config` object to adhere to the Gemini API guidelines.
             const firstResponse = await ai.models.generateContent({
                 model: 'gemini-2.5-flash',
                 contents: [{ role: 'user', parts: [{ text: trimmedInput }] }],
-                tools: [{ functionDeclarations: [findProductByNameFunctionDeclaration] }],
-                systemInstruction: `You are a friendly customer support assistant for Zenith E-Commerce. Your primary role is to help users by answering questions about products and company policies. If the user asks about a specific product, you MUST use the 'findProductByName' tool to get information. If the user asks a general question, you will classify it against a list of allowed topics before answering.`
+                config: {
+                    tools: [{ functionDeclarations: [findProductByNameFunctionDeclaration] }],
+                    systemInstruction: `You are a friendly customer support assistant for Zenith E-Commerce. Your primary role is to help users by answering questions about products and company policies. If the user asks about a specific product, you MUST use the 'findProductByName' tool to get information. If the user asks a general question, you will classify it against a list of allowed topics before answering.`
+                }
             });
 
             let aiResponseText = '';

@@ -21,6 +21,7 @@ const AdminEditProductPage = () => {
         category: '',
         stock: 0,
     });
+    const [imageUrls, setImageUrls] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
@@ -40,6 +41,7 @@ const AdminEditProductPage = () => {
                          return;
                     }
                     setProduct(data);
+                    setImageUrls(data.imageUrls);
                     setFormData({
                         name: data.name,
                         description: data.description,
@@ -67,6 +69,24 @@ const AdminEditProductPage = () => {
             [name]: value
         }));
     };
+    
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files;
+        if (files) {
+            const newUrls = Array.from(files).map(() => `https://placehold.co/600x400/1e40af/white?text=New+Img`);
+            setImageUrls(prev => [...prev, ...newUrls]);
+        }
+    };
+
+    const handleRemoveImage = (urlToRemove: string) => {
+        if (imageUrls.length <= 1) {
+            setError('A product must have at least one image.');
+            return;
+        }
+        setError('');
+        setImageUrls(prev => prev.filter(url => url !== urlToRemove));
+    };
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -90,6 +110,7 @@ const AdminEditProductPage = () => {
                 stock: Number(formData.stock),
                 price: (offerPriceNum > 0) ? offerPriceNum : originalPriceNum,
                 originalPrice: (offerPriceNum > 0) ? originalPriceNum : undefined,
+                imageUrls: imageUrls,
             };
             await api.updateProduct(product.id, updatedProductData);
             navigate(`${basePath}/products`);
@@ -141,6 +162,38 @@ const AdminEditProductPage = () => {
                         <input type="text" id="category" name="category" value={formData.category || ''} onChange={handleChange} required className="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 focus:ring-primary-500 focus:border-primary-500 text-white" />
                     </div>
                 </div>
+
+                <div className="space-y-4 pt-4 border-t border-gray-700">
+                    <label className="block text-sm font-medium text-gray-300">Product Images</label>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                        {imageUrls.map((url, index) => (
+                            <div key={index} className="relative group">
+                                <img src={url} alt={`Product image ${index + 1}`} className="w-full h-auto object-cover rounded-md aspect-square" />
+                                <button 
+                                    type="button" 
+                                    onClick={() => handleRemoveImage(url)} 
+                                    className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 h-6 w-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                                    disabled={imageUrls.length <= 1}
+                                    title={imageUrls.length <= 1 ? "A product must have at least one image" : "Remove image"}
+                                >
+                                    &times;
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                    <div>
+                        <label htmlFor="image-upload" className="block text-sm font-medium text-gray-300 mb-1">Add New Images</label>
+                        <input 
+                            id="image-upload"
+                            type="file" 
+                            multiple 
+                            onChange={handleImageChange} 
+                            accept="image/*"
+                            className="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100"
+                        />
+                    </div>
+                </div>
+                
                  <div className="mt-8 flex items-center justify-end">
                     {error && <p className="text-red-400 mr-4 text-sm">{error}</p>}
                     <Button type="submit" disabled={isSubmitting}>

@@ -37,6 +37,10 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         throw new Error('This account has been blocked.');
       }
       
+      if (foundUserOrStatus === 'pending_verification') {
+        throw new Error('Please verify your email before logging in.');
+      }
+      
       if (typeof foundUserOrStatus === 'object' && foundUserOrStatus) {
         const foundUser = foundUserOrStatus;
         setUser(foundUser);
@@ -61,9 +65,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     try {
         const newUser = await api.register(email, password_bcrypt);
         if (newUser) {
-            setUser(newUser);
-            localStorage.setItem('user', JSON.stringify(newUser));
-            navigate('/'); // Redirect to home on successful registration
+            navigate('/please-verify'); // Redirect to verification info page
         } else {
             throw new Error('An account with this email already exists.');
         }
