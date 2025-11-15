@@ -157,3 +157,10 @@ export interface JobOpening {
   location: string;
   description: string;
 }
+
+export interface PressRelease {
+  id: string;
+  title: string;
+  date: string;
+  excerpt: string;
+}

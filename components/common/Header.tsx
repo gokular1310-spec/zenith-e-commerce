@@ -140,6 +140,7 @@ const Header = () => {
                  <NavLink to="/about" style={getLinkStyle}>About</NavLink>
                  <NavLink to="/team" style={getLinkStyle}>Team</NavLink>
                  <NavLink to="/careers" style={getLinkStyle}>Careers</NavLink>
+                 <NavLink to="/press" style={getLinkStyle}>Press</NavLink>
                  <NavLink to="/contact" style={getLinkStyle}>Contact</NavLink>
                  <NavLink to="/coming-soon" style={getLinkStyle}>Blog</NavLink>
               </nav>
@@ -242,6 +243,7 @@ const Header = () => {
                  <NavLink to="/about" className="block px-3 py-2 rounded-md text-base font-medium" style={getLinkStyle} onClick={() => setIsMobileMenuOpen(false)}>About</NavLink>
                  <NavLink to="/team" className="block px-3 py-2 rounded-md text-base font-medium" style={getLinkStyle} onClick={() => setIsMobileMenuOpen(false)}>Team</NavLink>
                  <NavLink to="/careers" className="block px-3 py-2 rounded-md text-base font-medium" style={getLinkStyle} onClick={() => setIsMobileMenuOpen(false)}>Careers</NavLink>
+                 <NavLink to="/press" className="block px-3 py-2 rounded-md text-base font-medium" style={getLinkStyle} onClick={() => setIsMobileMenuOpen(false)}>Press</NavLink>
                  <NavLink to="/contact" className="block px-3 py-2 rounded-md text-base font-medium" style={getLinkStyle} onClick={() => setIsMobileMenuOpen(false)}>Contact</NavLink>
                  <NavLink to="/coming-soon" className="block px-3 py-2 rounded-md text-base font-medium" style={getLinkStyle} onClick={() => setIsMobileMenuOpen(false)}>Blog</NavLink>
                  {!user ? (

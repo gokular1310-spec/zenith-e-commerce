@@ -1,4 +1,4 @@
-import { Product, User, Order, OrderStatus, NewProduct, CartItem, ShippingAddress, Conversation, Message, Review, NewReview, AITopic, Page, NewPage, SavedTheme, ThemeSettings, JobOpening } from '../types';
+import { Product, User, Order, OrderStatus, NewProduct, CartItem, ShippingAddress, Conversation, Message, Review, NewReview, AITopic, Page, NewPage, SavedTheme, ThemeSettings, JobOpening, PressRelease } from '../types';
 
 const mockProducts: Product[] = [
   // Accessories
@@ -426,6 +426,27 @@ let mockJobOpenings: JobOpening[] = [
     }
 ];
 
+let mockPressReleases: PressRelease[] = [
+    {
+        id: 'pr-1',
+        title: 'Zenith Launches New "Fusion" Line of Ergonomic Peripherals',
+        date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
+        excerpt: 'Zenith today announced its new Fusion line, featuring an advanced wireless mouse and mechanical keyboard designed for ultimate comfort and productivity.'
+    },
+    {
+        id: 'pr-2',
+        title: 'Zenith Partners with EcoTech to Achieve Carbon Neutral Shipping',
+        date: new Date(Date.now() - 35 * 24 * 60 * 60 * 1000).toISOString(),
+        excerpt: 'In a landmark move for sustainable e-commerce, Zenith has partnered with EcoTech to ensure all customer shipments are 100% carbon neutral.'
+    },
+    {
+        id: 'pr-3',
+        title: 'The Nebula Gaming Laptop Receives "Editor\'s Choice" Award',
+        date: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString(),
+        excerpt: 'The highly anticipated Nebula Gaming Laptop has been awarded the prestigious "Editor\'s Choice" award from Tech Radar for its exceptional performance and design.'
+    }
+];
+
 
 const simulateDelay = <T,>(data: T): Promise<T> =>
   new Promise(resolve => setTimeout(() => resolve(data), 500));
@@ -795,6 +816,9 @@ export const api = {
   // Job Openings API
   getJobOpenings: () => simulateDelay([...mockJobOpenings]),
   
+  // Press Releases API
+  getPressReleases: () => simulateDelay([...mockPressReleases]),
+
   // Search API
   searchProducts: (query: string) => {
     const lowercasedQuery = query.toLowerCase();

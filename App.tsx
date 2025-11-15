@@ -33,6 +33,7 @@ import ComingSoonPage from './pages/public/ComingSoonPage';
 import DealsPage from './pages/public/DealsPage';
 import CareersPage from './pages/public/CareersPage';
 import SearchResultsPage from './pages/public/SearchResultsPage';
+import PressPage from './pages/public/PressPage';
 
 
 import ProtectedRoute from './layouts/ProtectedRoute';
@@ -101,6 +102,7 @@ const AppRoutes = () => {
               <Route path="coming-soon" element={<ComingSoonPage />} />
               <Route path="deals" element={<DealsPage />} />
               <Route path="careers" element={<CareersPage />} />
+              <Route path="press" element={<PressPage />} />
 
 
               {/* Customer Protected Routes */}
