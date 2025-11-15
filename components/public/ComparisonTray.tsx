@@ -11,7 +11,7 @@ const ComparisonTray = () => {
     }
 
     return (
-        <div className="fixed bottom-0 left-0 right-0 bg-gray-800/95 text-white p-4 shadow-lg z-40 animate-slide-up">
+        <div className="fixed bottom-0 left-0 right-0 bg-gray-800/95 text-white p-4 shadow-lg z-30 animate-slide-up">
             <div className="container mx-auto flex justify-between items-center">
                 <div className="flex items-center gap-4">
                     <h3 className="font-bold text-lg hidden sm:block">Compare Products</h3>

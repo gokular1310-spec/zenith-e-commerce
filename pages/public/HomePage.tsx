@@ -7,6 +7,14 @@ import Button from '../../components/common/Button';
 import { Link, useSearchParams } from 'react-router-dom';
 import ProductCard from '../../components/public/ProductCard';
 
+const floatingImageClasses = [
+    "absolute -top-10 -left-10 w-48 h-48 rounded-full opacity-20 animate-float-1 transition-all duration-1000 object-cover",
+    "absolute -bottom-16 right-10 w-64 h-64 rounded-lg opacity-20 animate-float-2 transform rotate-12 transition-all duration-1000 object-cover",
+    "absolute top-1/2 -right-20 w-40 h-40 rounded-full opacity-10 animate-float-3 transition-all duration-1000 object-cover",
+    "absolute top-1/4 left-1/4 w-32 h-32 rounded-xl opacity-15 animate-float-4 transform -rotate-6 transition-all duration-1000 object-cover",
+    "absolute bottom-1/4 -left-20 w-52 h-52 rounded-2xl opacity-15 animate-float-5 transform rotate-3 transition-all duration-1000 object-cover",
+];
+
 const HomePage = () => {
   const [searchParams] = useSearchParams();
   const category = searchParams.get('category');
@@ -22,6 +30,8 @@ const HomePage = () => {
   
   // State for filtered products
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [floatingProducts, setFloatingProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     const fetchPageData = async () => {
@@ -38,16 +48,19 @@ const HomePage = () => {
         } else {
           // Fetch carousel data for the main homepage
           const [
+            allProductsData,
             bestSellersData,
             dealsData,
             under99Data,
             inspiredData
           ] = await Promise.all([
+            api.getProducts(),
             api.getBestSellers(),
             api.getSpecialOffers(),
             api.getProductsUnderPrice(99),
             api.getInspiredByHistory(),
           ]);
+          setAllProducts(allProductsData);
           setBestSellers(bestSellersData);
           setSpecialOffers(dealsData);
           setUnder99(under99Data);
@@ -61,6 +74,23 @@ const HomePage = () => {
     };
     fetchPageData();
   }, [category, subcategory]);
+  
+  // Effect for floating images
+  useEffect(() => {
+    if (category || allProducts.length < 5) return;
+
+    const selectRandomProducts = () => {
+        const shuffled = [...allProducts].sort(() => 0.5 - Math.random());
+        setFloatingProducts(shuffled.slice(0, 5));
+    };
+
+    selectRandomProducts(); // Initial selection
+
+    const intervalId = setInterval(selectRandomProducts, 30000); // 30 seconds
+
+    return () => clearInterval(intervalId); // Cleanup on unmount or when category changes
+  }, [allProducts, category]);
+
 
   if (loading) {
     return <div className="flex justify-center items-center h-96"><Spinner /></div>;
@@ -100,9 +130,14 @@ const HomePage = () => {
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-primary-900/10 mix-blend-multiply"></div>
           {/* Floating decorative images */}
-          <img src="https://placehold.co/600x400/06b6d4/white?text=Tech" alt="" className="absolute -top-10 -left-10 w-48 h-48 rounded-full opacity-20 animate-float-1" />
-          <img src="https://placehold.co/600x400/1e40af/white?text=Zenith" alt="" className="absolute -bottom-16 right-10 w-64 h-64 rounded-lg opacity-20 animate-float-2 transform rotate-12" />
-          <img src="https://placehold.co/600x400/1d4ed8/white?text=Gear" alt="" className="absolute top-1/2 -right-20 w-40 h-40 rounded-full opacity-10 animate-float-3" />
+          {floatingProducts.map((product, index) => (
+            <img 
+              key={index} 
+              src={product.imageUrls[0]} 
+              alt="" 
+              className={floatingImageClasses[index]} 
+            />
+          ))}
         </div>
         <div className="relative max-w-4xl mx-auto text-center py-24 px-4 sm:px-6 lg:px-8">
           <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-5xl md:text-6xl">

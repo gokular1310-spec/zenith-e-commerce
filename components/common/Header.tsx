@@ -92,7 +92,7 @@ const Header = () => {
 
   return (
     <>
-      <header className="shadow-md sticky top-0 z-50" style={headerStyle}>
+      <header className="shadow-md sticky top-0 z-40" style={headerStyle}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
@@ -212,11 +212,12 @@ const Header = () => {
       </header>
 
       {/* Mobile Menu Sidebar */}
-      <div className={`fixed inset-0 z-40 md:hidden`}>
+      <div className={`fixed inset-0 z-50 md:hidden ${isMobileMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}>
         {/* Overlay */}
         <div 
-          className={`absolute inset-0 bg-black transition-opacity ${isMobileMenuOpen ? 'bg-opacity-50' : 'bg-opacity-0 pointer-events-none'}`} 
-          onClick={() => setIsMobileMenuOpen(false)}>
+          className={`absolute inset-0 bg-black transition-opacity duration-300 ease-in-out ${isMobileMenuOpen ? 'bg-opacity-50' : 'bg-opacity-0'}`} 
+          onClick={() => setIsMobileMenuOpen(false)}
+          aria-hidden={!isMobileMenuOpen}>
         </div>
         
         {/* Sidebar */}
