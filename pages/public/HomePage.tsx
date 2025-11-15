@@ -4,47 +4,95 @@ import { api } from '../../services/mockApiService';
 import Spinner from '../../components/common/Spinner';
 import ProductCarousel from '../../components/public/ProductCarousel';
 import Button from '../../components/common/Button';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
+import ProductCard from '../../components/public/ProductCard';
 
 const HomePage = () => {
+  const [searchParams] = useSearchParams();
+  const category = searchParams.get('category');
+  const subcategory = searchParams.get('subcategory');
+
   const [loading, setLoading] = useState(true);
+  
+  // State for homepage carousels
   const [bestSellers, setBestSellers] = useState<Product[]>([]);
   const [specialOffers, setSpecialOffers] = useState<Product[]>([]);
   const [under99, setUnder99] = useState<Product[]>([]);
   const [inspired, setInspired] = useState<Product[]>([]);
+  
+  // State for filtered products
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    const fetchHomePageData = async () => {
+    const fetchPageData = async () => {
       setLoading(true);
       try {
-        const [
-          bestSellersData,
-          dealsData,
-          under99Data,
-          inspiredData
-        ] = await Promise.all([
-          api.getBestSellers(),
-          api.getSpecialOffers(),
-          api.getProductsUnderPrice(99),
-          api.getInspiredByHistory(),
-        ]);
-        setBestSellers(bestSellersData);
-        setSpecialOffers(dealsData);
-        setUnder99(under99Data);
-        setInspired(inspiredData);
+        if (category) {
+          // Fetch and filter products if category is present in URL
+          const allProducts = await api.getProducts();
+          let products = allProducts.filter(p => p.category.toLowerCase() === category.toLowerCase());
+          if (subcategory) {
+              products = products.filter(p => p.subCategory && p.subCategory.toLowerCase() === subcategory.toLowerCase());
+          }
+          setFilteredProducts(products);
+        } else {
+          // Fetch carousel data for the main homepage
+          const [
+            bestSellersData,
+            dealsData,
+            under99Data,
+            inspiredData
+          ] = await Promise.all([
+            api.getBestSellers(),
+            api.getSpecialOffers(),
+            api.getProductsUnderPrice(99),
+            api.getInspiredByHistory(),
+          ]);
+          setBestSellers(bestSellersData);
+          setSpecialOffers(dealsData);
+          setUnder99(under99Data);
+          setInspired(inspiredData);
+        }
       } catch (error) {
-        console.error("Failed to fetch homepage data:", error);
+        console.error("Failed to fetch page data:", error);
       } finally {
         setLoading(false);
       }
     };
-    fetchHomePageData();
-  }, []);
+    fetchPageData();
+  }, [category, subcategory]);
 
   if (loading) {
     return <div className="flex justify-center items-center h-96"><Spinner /></div>;
   }
+  
+  // Render filtered product grid view if a category is selected
+  if (category) {
+    return (
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl mb-8 capitalize">
+          {subcategory ? subcategory : category}
+        </h1>
+        {filteredProducts.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {filteredProducts.map(product => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center bg-white p-12 rounded-lg shadow-md">
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">No Products Found</h2>
+              <p className="text-gray-600 mb-6">There are no products in this category yet. Please check back later!</p>
+              <Link to="/">
+                <Button>Back to Home</Button>
+              </Link>
+          </div>
+        )}
+      </div>
+    );
+  }
 
+  // Render original homepage with hero and carousels
   return (
     <div className="space-y-16">
       {/* Hero Section */}
